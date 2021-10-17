@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 
+import com.odin.Exceptions.PropertiesException;
 import com.odin.constantValues.Constants;
+import com.odin.dbManager.DBCheck;
 
 public class Config extends HttpServlet{
 	
@@ -24,29 +26,43 @@ public class Config extends HttpServlet{
 	static String PASS=null;
 	
 	public void init() {
-		LOG.debug("Initializing Properties file");
+		LOG.debug("Initializing Daemon");
 		FileReader reader = null;
+		Properties prop = new Properties();
 		try {
 			reader = new FileReader("dbProp.properties");
-			Properties prop = new Properties();
 			try {
 				prop.load(reader);
-				Constants.setDRIVER(prop.getProperty("dbDriver"));
-				Constants.setIP(prop.getProperty("dbURL"));
-				Constants.setPORT(prop.getProperty("dbPort"));
-				Constants.setDBNAME(prop.getProperty("dbName"));
-				Constants.setUSER(prop.getProperty("dbUser"));
-				Constants.setPASS(prop.getProperty("dbPass"));
 			} catch (IOException e) {
 				LOG.debug("Unable to load DB properties");
-				System.exit(0);
 			}
 			
 		} catch (FileNotFoundException e) {
 			LOG.error("Unable to read dbProp.properties file");
-			System.exit(0);
 		}
-		Constants obj = Constants.getInstance();
-		LOG.debug(obj.getDRIVER()+" "+obj.getIP()+" "+obj.getPORT()+" "+obj.getUSER()+" "+obj.getPASS());
+		if(prop.getProperty("dbDriver")==null || prop.getProperty("dbURL")==null || prop.getProperty("dbPort")==null || prop.getProperty("dbName")==null || prop.getProperty("dbUser") ==null || prop.getProperty("dbPass") == null) {
+			try {
+				throw new PropertiesException("Please check dbProp.properties file contents");
+			}
+			catch(Exception e) {
+				LOG.error(e);
+				LOG.fatal("Initializing with default values");
+				LOG.fatal("DB URL is set as : "+Constants.getIP()+Constants.getPORT()+Constants.getDBNAME());
+				LOG.fatal("DB User and Password is set as : "+Constants.getUSER()+" and "+Constants.getPASS());
+			}
+		}
+		else {
+			Constants.setDRIVER(prop.getProperty("dbDriver"));
+			Constants.setIP(prop.getProperty("dbURL"));
+			Constants.setPORT(prop.getProperty("dbPort"));
+			Constants.setDBNAME(prop.getProperty("dbName"));
+			Constants.setUSER(prop.getProperty("dbUser"));
+			Constants.setPASS(prop.getProperty("dbPass"));
+		}
+		DBCheck dbCheckObj = new DBCheck();
+		if(dbCheckObj.dbCheck(Constants.getInstance()) ==null)
+			LOG.error("Cannot initialize DB");
+		else
+			LOG.debug("DB initialized successfully");
 	}
 }
