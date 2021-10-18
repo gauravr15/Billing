@@ -1,9 +1,9 @@
 package com.odin.constantValues;
 
-public class Constants {
+public class DBConstants {
 	
 	
-	static Constants DBConfigObject = new Constants();
+	static DBConstants DBConfigObject = new DBConstants();
 	
 	static String DRIVER = null;
 	static String IP = null;
@@ -61,11 +61,11 @@ public class Constants {
 	}
 
 	
-	private Constants() {
+	private DBConstants() {
 		
 	}
 	
-	public static Constants getInstance() {
+	public static DBConstants getInstance() {
 		return DBConfigObject;
 	}
 	

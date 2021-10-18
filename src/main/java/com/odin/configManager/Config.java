@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServlet;
 import org.apache.log4j.Logger;
 
 import com.odin.Exceptions.PropertiesException;
-import com.odin.constantValues.Constants;
+import com.odin.constantValues.DBConstants;
 import com.odin.dbManager.DBCheck;
+import com.odin.supportingThreads.BirthdayThread;
 
 public class Config extends HttpServlet{
 	
@@ -47,22 +48,28 @@ public class Config extends HttpServlet{
 			catch(Exception e) {
 				LOG.error(e);
 				LOG.fatal("Initializing with default values");
-				LOG.fatal("DB URL is set as : "+Constants.getIP()+Constants.getPORT()+Constants.getDBNAME());
-				LOG.fatal("DB User and Password is set as : "+Constants.getUSER()+" and "+Constants.getPASS());
+				LOG.fatal("DB URL is set as : "+DBConstants.getIP()+DBConstants.getPORT()+DBConstants.getDBNAME());
+				LOG.fatal("DB User and Password is set as : "+DBConstants.getUSER()+" and "+DBConstants.getPASS());
 			}
 		}
 		else {
-			Constants.setDRIVER(prop.getProperty("dbDriver"));
-			Constants.setIP(prop.getProperty("dbURL"));
-			Constants.setPORT(prop.getProperty("dbPort"));
-			Constants.setDBNAME(prop.getProperty("dbName"));
-			Constants.setUSER(prop.getProperty("dbUser"));
-			Constants.setPASS(prop.getProperty("dbPass"));
+			DBConstants.setDRIVER(prop.getProperty("dbDriver"));
+			DBConstants.setIP(prop.getProperty("dbURL"));
+			DBConstants.setPORT(prop.getProperty("dbPort"));
+			DBConstants.setDBNAME(prop.getProperty("dbName"));
+			DBConstants.setUSER(prop.getProperty("dbUser"));
+			DBConstants.setPASS(prop.getProperty("dbPass"));
 		}
 		DBCheck dbCheckObj = new DBCheck();
-		if(dbCheckObj.dbCheck(Constants.getInstance()) ==null)
+		if(dbCheckObj.dbCheck(DBConstants.getInstance()) ==null) {
 			LOG.error("Cannot initialize DB");
+			System.exit(0);
+		}
 		else
 			LOG.debug("DB initialized successfully");
+		BirthdayThread birthdayObject = BirthdayThread.getInstance();;
+		Thread birthdayThread = new Thread(birthdayObject);
+		birthdayThread.setName("BIRTHDAY_THREAD");
+		birthdayThread.start();
 	}
 }
