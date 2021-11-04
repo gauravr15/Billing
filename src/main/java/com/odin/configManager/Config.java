@@ -12,8 +12,8 @@ import org.apache.log4j.Logger;
 
 import com.odin.Exceptions.PropertiesException;
 import com.odin.constantValues.DBConstants;
+import com.odin.customerHandler.CustomerBirthday;
 import com.odin.dbManager.DBCheck;
-import com.odin.supportingThreads.BirthdayThread;
 
 public class Config extends HttpServlet{
 	
@@ -31,7 +31,7 @@ public class Config extends HttpServlet{
 		FileReader reader = null;
 		Properties prop = new Properties();
 		try {
-			reader = new FileReader("dbProp.properties");
+			reader = new FileReader("../TOMCAT_RELEASE/conf/dbProp.properties");
 			try {
 				prop.load(reader);
 			} catch (IOException e) {
@@ -59,17 +59,22 @@ public class Config extends HttpServlet{
 			DBConstants.setDBNAME(prop.getProperty("dbName"));
 			DBConstants.setUSER(prop.getProperty("dbUser"));
 			DBConstants.setPASS(prop.getProperty("dbPass"));
+			LOG.debug("DB Details : "+DBConstants.getIP()+DBConstants.getPORT()+DBConstants.getDBNAME());
+			LOG.debug("DB username is "+DBConstants.getUSER()+" and password is "+DBConstants.getPASS());
 		}
-		DBCheck dbCheckObj = new DBCheck();
-		if(dbCheckObj.dbCheck(DBConstants.getInstance()) ==null) {
-			LOG.error("Cannot initialize DB");
+		DBCheck dbCheckObject = new DBCheck();
+		if(dbCheckObject.dbCheck() == true) {
+			LOG.trace("Passed DB Check");
+			LOG.debug("System initialized successfully");
+		}
+		else {
+			LOG.error("DB Check failed \n Terminating system.....");
 			System.exit(0);
 		}
-		else
-			LOG.debug("DB initialized successfully");
-		BirthdayThread birthdayObject = BirthdayThread.getInstance();;
-		Thread birthdayThread = new Thread(birthdayObject);
-		birthdayThread.setName("BIRTHDAY_THREAD");
+		ConfigParamMap.paramValues();
+		CustomerBirthday birthday = new CustomerBirthday();
+		Thread birthdayThread = new Thread(birthday);
+		birthdayThread.setName("BIRTHDAY_SMS");
 		birthdayThread.start();
 	}
 }

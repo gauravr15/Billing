@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
+import org.apache.logging.log4j.core.util.Throwables;
 
 import com.odin.constantValues.DBConstants;
 
@@ -12,16 +13,33 @@ public class DBCheck {
 	
 	Logger LOG = Logger.getLogger(DBCheck.class.getClass());
 	
-	public Connection dbCheck(DBConstants dbObject) {
-		Connection conn = null;
+	static boolean dbCheckPass = false;
+	
+	public boolean dbCheck() {
+		String _URL = DBConstants.getIP()+DBConstants.getPORT()+DBConstants.getDBNAME();
+		Connection conn =null;
 		try {
 			Class.forName(DBConstants.getDRIVER());
-			String _URL = DBConstants.getIP()+DBConstants.getPORT()+DBConstants.getDBNAME();
-			LOG.debug("DB URL : "+_URL);
-			conn = DriverManager.getConnection(_URL,DBConstants.getUSER(),DBConstants.getPASS());
-		} catch (ClassNotFoundException | SQLException e) {
-			LOG.error("Unable to connect to DB");
+		} catch (ClassNotFoundException e) {
+			LOG.error("Error initializing DB Driver");
+			LOG.error(Throwables.toStringList(e));
 		}
-		return conn;
+		try {
+			conn = DriverManager.getConnection(_URL,DBConstants.getUSER(),DBConstants.getPASS());
+			if(conn != null) {
+				dbCheckPass=true;
+			}
+			try {
+				conn.close();
+				LOG.trace("Connection released");
+			} catch (SQLException e) {
+				LOG.error("Unable to close connection");
+				LOG.error(Throwables.toStringList(e));
+			}
+			LOG.trace("dbCheckPass value is "+dbCheckPass);
+		} catch (SQLException e) {
+			LOG.error(Throwables.toStringList(e));
+		}
+		return dbCheckPass;
 	}
 }

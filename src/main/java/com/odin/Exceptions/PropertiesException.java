@@ -11,7 +11,7 @@ public class PropertiesException extends RuntimeException{
 	
 	public PropertiesException(String excep){
 		super(excep);
-		LOG.fatal("Setting default values");
+		LOG.debug("Setting default values");
 		DBConstants.setDRIVER("com.mysql.cj.jdbc.Driver");
 		DBConstants.setIP("jdbc:mysql://localhost:");
 		DBConstants.setPORT("3306/");
