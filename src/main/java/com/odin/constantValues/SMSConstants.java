@@ -5,7 +5,7 @@ public enum SMSConstants {
 	PROMOTIONAL("P"),
 	SALARY("S"),
 	BILLING("B");
-	String values;
+	public String values;
 	SMSConstants(String type) {
 		values = type;
 	}

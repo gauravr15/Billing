@@ -11,7 +11,7 @@ import com.odin.constantValues.DBConstants;
 
 public class DBConnectionAgent {
 	
-	static Logger LOG = Logger.getLogger(DBConnectionAgent.class.getClass());
+	Logger LOG = Logger.getLogger(DBConnectionAgent.class.getClass());
 	
 	public Connection CONN = null;
 	public static String DB_DRIVER =DBConstants.getDRIVER();

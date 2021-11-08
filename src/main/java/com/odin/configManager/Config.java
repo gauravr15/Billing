@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 
+import com.odin.Exceptions.ConfigException;
 import com.odin.Exceptions.PropertiesException;
+import com.odin.constantValues.ConfigParamName;
 import com.odin.constantValues.DBConstants;
 import com.odin.customerHandler.CustomerBirthday;
 import com.odin.dbManager.DBCheck;
@@ -18,7 +20,7 @@ import com.odin.dbManager.DBCheck;
 public class Config extends HttpServlet{
 	
 	private static final long serialVersionUID = 5987901213242640293L;
-	static Logger LOG = Logger.getLogger(Config.class.getClass());
+	Logger LOG = Logger.getLogger(Config.class.getClass());
 	
 	static String IP=null;
 	static String PORT=null;
@@ -72,9 +74,22 @@ public class Config extends HttpServlet{
 			System.exit(0);
 		}
 		ConfigParamMap.paramValues();
-		CustomerBirthday birthday = new CustomerBirthday();
-		Thread birthdayThread = new Thread(birthday);
-		birthdayThread.setName("BIRTHDAY_SMS");
-		birthdayThread.start();
+		if(Boolean.parseBoolean(ConfigParamMap.params.get(ConfigParamName.BIRTHDAY_CHECK.toString()))==true) {
+			CustomerBirthday birthdayObject = new CustomerBirthday();
+			Thread birthdayThread = new Thread(birthdayObject);
+			birthdayThread.setName("BIRTHDAY_THREAD");
+			birthdayThread.start();
+		}
+		else if(Boolean.parseBoolean(ConfigParamMap.params.get("BIRTHDAY_CHECK"))==false) {
+			LOG.debug("Birthday SMS is disabled");
+		}
+		else {
+			try {
+				throw new ConfigException ("Value for BIRTHDAY_CHECK is not configured");
+			}
+			catch(Exception e) {
+				LOG.debug("Bithday SMS will not be sent.");
+			}
+		}
 	}
 }

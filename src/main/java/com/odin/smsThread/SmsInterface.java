@@ -1,5 +1,5 @@
 package com.odin.smsThread;
 
-public interface SmsInterface {
-	void smsNumberList();
+public abstract class SmsInterface {
+	public abstract void sendSMS();
 }

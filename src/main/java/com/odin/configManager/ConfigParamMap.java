@@ -7,13 +7,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.apache.logging.log4j.core.util.Throwables;
 
 import com.odin.dbManager.DBConnectionAgent;
 
 public class ConfigParamMap {
 	
-	static HashMap<String, String> params;
+	public static HashMap<String, String> params;
 	static Logger LOG = Logger.getLogger(ConfigParamMap.class.getClass());
 	
 	static void paramValues() {
@@ -27,14 +26,14 @@ public class ConfigParamMap {
 			stmt = conn.prepareStatement(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			LOG.error(Throwables.toStringList(e));
+			LOG.error(e);
 		}
 	    ResultSet rs = null;
 	    try {
 			rs = stmt.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			LOG.error(Throwables.toStringList(e));
+			LOG.error(e);
 		}
 	    try {
 			while(rs.next()) {
@@ -42,25 +41,25 @@ public class ConfigParamMap {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			LOG.error(Throwables.toStringList(e));
+			LOG.error(e);
 	    }
 	    try {
 			rs.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			LOG.error(Throwables.toStringList(e));
+			LOG.error(e);
 		}
 	    try {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			LOG.error(Throwables.toStringList(e));
+			LOG.error(e);
 		}
 	    try {
 			conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			LOG.error(Throwables.toStringList(e));
+			LOG.error(e);
 		}
 	}
 }
