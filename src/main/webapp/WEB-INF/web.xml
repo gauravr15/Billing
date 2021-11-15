@@ -5,4 +5,12 @@
     <servlet-class>com.odin.configManager.Config</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+   <servlet-mapping>
+    <servlet-name>login</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>login</servlet-name>
+    <servlet-class>com.odin.pageController.LoginController</servlet-class>
+  </servlet>
 </web-app>
