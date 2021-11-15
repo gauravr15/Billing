@@ -1,0 +1,77 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" 
+       name="dateUtilsProject" default="main" basedir=".">
+	<description>
+		Create a Java Project (JAR) with Ant build script
+	</description>
+
+	<property name="projectName" value="sm" />
+	<property name="src.dir" location="src" />
+	<property name="build.dir" location="bin" />
+	<property name="lib.dir" value="lib" />
+	<property name="dist.dir" location="dist" />
+	<property name="main-class" value="com.odin.configManager.Config.java" />
+
+	<!-- ivy start -->
+	<!-- ivy to get dependencies and copy to project lib folder automatically -->
+
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<!-- external libraries classpath, we don't need sources and javadoc -->
+	<path id="classpath">
+		<fileset dir="${basedir}/">
+			<include name="${lib.dir}/*.jar" />
+			<exclude name="${lib.dir}/*sources.jar"/>
+			<exclude name="${lib.dir}/*javadoc.jar"/>
+		</fileset>
+	</path>
+
+	<!-- To work with external libraries, need classpath to compile -->
+	<target name="compile" depends="init" description="compile the source ">
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" />
+	</target>
+
+	<!-- constructs the external libraries classpath name -->
+	<pathconvert property="classpath.name" pathsep=" ">
+		<path refid="classpath" />
+		<mapper>
+			<chainedmapper>
+				<flattenmapper />
+				<globmapper from="*.jar" to="lib/*.jar" />
+			</chainedmapper>
+		</mapper>
+	</pathconvert>
+
+
+	<!-- jar it, and declares the ext libraries in manifest.mf file -->
+	<target name="jar" depends="compile" description="package, output to JAR">
+
+		<echo message="classpath.name : ${classpath.name} " />
+
+		
+
+		<jar destfile="${basedir}/output/sm.jar" 
+			basedir="${build.dir}" >
+			<zipgroupfileset dir="${lib.dir}" includes="${basedir}/lib/*.jar" />
+		</jar>
+	</target>
+	
+	<target name = "war">
+   <war destfile = "${basedir}/output/subscription.war" webxml = "${basedir}/src/main/webapp/WEB-INF/web.xml">
+      <zipgroupfileset dir="${lib.dir}" includes="${basedir}/lib/*.jar" />
+      
+   </war>
+</target>
+	
+	
+
+	<target name="clean" description="clean up">
+		<delete dir="${build.dir}/output" />
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<!-- Default, run this -->
+	<target name="main" depends="clean, compile, jar" />
+
+</project>

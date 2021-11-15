@@ -19,6 +19,9 @@ import com.odin.smsThread.SmsInterface;
 public class CustomerBirthday extends SmsInterface implements Runnable {
 
 	Logger LOG = Logger.getLogger(CustomerBirthday.class.getClass());
+	
+	String messageBody = null;
+	String phoneNumber = null;
 
 	public void run() {
 		LOG.trace("Inside customer birthday.");
@@ -50,9 +53,12 @@ public class CustomerBirthday extends SmsInterface implements Runnable {
 				stmt = conn.prepareStatement(query);
 				stmt.setString(1, SMSConstants.BIRTHDAY.values);
 				rs = stmt.executeQuery();
+				int count = 0;
 				while (rs.next()) {
 					lastSmsDate = rs.getString("DATE");
+					count = count+1;
 				}
+				if(count > 0) {
 				smsDate = lastSmsDate.split(" ");
 				lastSmsDate = smsDate[0];
 				LOG.debug("Last SMS for type " + SMSConstants.BIRTHDAY.values + " was sent on : " + lastSmsDate);
@@ -61,6 +67,8 @@ public class CustomerBirthday extends SmsInterface implements Runnable {
 				LOG.debug("Current system date is : " + currentDate);
 				if (currentDate.compareTo(ld) > 0) {
 					LOG.debug("Fetching user data from customer data table");
+					LOG.debug("This module is under development and will be deployed soon");
+					/* Call the method that will fetch customer data from customer_info table */
 				} else {
 					LOG.debug("Birthday sms already sent on : " + lastSmsDate);
 					LOG.debug("Going to sleep for 1 hour");
@@ -78,6 +86,11 @@ public class CustomerBirthday extends SmsInterface implements Runnable {
 						LOG.error(e);
 					}
 					run();
+				}
+				}
+				else {
+					LOG.fatal("No entry found in SMS_LOG table for type "+SMSConstants.BIRTHDAY.values);
+					LOG.debug("Inserting entry for type "+SMSConstants.BIRTHDAY.values);
 				}
 			} catch (SQLException e) {
 				LOG.error(e);

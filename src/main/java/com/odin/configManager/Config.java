@@ -91,5 +91,6 @@ public class Config extends HttpServlet{
 				LOG.debug("Bithday SMS will not be sent.");
 			}
 		}
+		LOG.debug("System initialisation complete.");
 	}
 }
