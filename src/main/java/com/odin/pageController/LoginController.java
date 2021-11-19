@@ -26,6 +26,15 @@ public class LoginController extends HttpServlet {
 	Logger LOG = Logger.getLogger(LoginController.class.getClass());
 	
 	String user = null;
+	int empId = 0;
+
+	public int getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
 
 	public String getUser() {
 		return user;
@@ -71,6 +80,7 @@ public class LoginController extends HttpServlet {
 		try {
 			while (rs.next()) {
 				userExists = true;
+				this.empId = Integer.parseInt(rs.getString("id"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
