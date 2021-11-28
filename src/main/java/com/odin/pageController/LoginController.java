@@ -109,7 +109,7 @@ public class LoginController extends HttpServlet {
 		} else {
 			LOG.error("User does not exists");
 			try {
-				res.sendRedirect("http://"+ConfigParamMap.params.get("HOST_IP")+":"+ConfigParamMap.params.get("HOST_PORT")+"/subscription/index.html");
+				res.sendRedirect("http://"+ConfigParamMap.params.get("HOST_IP")+":"+ConfigParamMap.params.get("HOST_PORT")+"/subscription/login.html");
 			} catch (IOException e) {
 				LOG.error(e);
 			}
