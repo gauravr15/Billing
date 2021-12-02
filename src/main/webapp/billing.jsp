@@ -4,14 +4,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel ="stylesheet" href = "bootstrap.min.css">
 <link rel ="stylesheet" href = "style.css">
-<script>
-function phoneSubmit(){
-    document.getElementById("phone").style.display = "none";
-}
-function phoneReenter(){
-    document.getElementById("phone").style.display = "block";
-}
-</script>
 </head>
 <body style="background-color:#111827;">
     <div class="container col-md-1 mt-5" style="color: white; display: flex; justify-content: center;">
@@ -33,6 +25,7 @@ function phoneReenter(){
         </div>
         </div>
     </div>
+    <script src="js/billing.js"></script>
     <footer>
         <div class="mt-5">
         <div class="row">
