@@ -27,6 +27,15 @@ public class LoginController extends HttpServlet {
 	
 	String user = null;
 	int empId = 0;
+	String level = null;
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
 
 	public int getEmpId() {
 		return empId;
@@ -59,7 +68,7 @@ public class LoginController extends HttpServlet {
 		String pass = req.getParameter("pass");
 		DBConnectionAgent DBObject = new DBConnectionAgent();
 		Connection conn = DBObject.connectionAgent();
-		String query = "SELECT * FROM AUTH_USER WHERE USER_ID = ? AND PASS = ?";
+		String query = "SELECT employee.level , auth_user.user_id , auth_user.pass, auth_user.id FROM auth_user INNER JOIN employee ON employee.id=auth_user.id where auth_user.user_id = ? and pass = ?;";
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -81,6 +90,7 @@ public class LoginController extends HttpServlet {
 			while (rs.next()) {
 				userExists = true;
 				this.empId = Integer.parseInt(rs.getString("id"));
+				this.level = rs.getString("level");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -90,6 +100,7 @@ public class LoginController extends HttpServlet {
 		if (userExists) {
 			LOG.debug("setting user session");
 			session.setAttribute("user", user);
+			session.setAttribute("level", this.level);
 			LOG.debug("logged in as : " + (String) session.getAttribute("user"));
 			this.user = (String) session.getAttribute("user");
 			EmployeeAttendance attendanceObject = new EmployeeAttendance();
@@ -99,7 +110,7 @@ public class LoginController extends HttpServlet {
 				stmt.close();
 				conn.close();
 				try {
-					res.sendRedirect("/subscription/home.html");
+					res.sendRedirect("/subscription/home.jsp");
 				} catch (IOException e) {
 					LOG.error(e);
 				}
@@ -109,7 +120,7 @@ public class LoginController extends HttpServlet {
 		} else {
 			LOG.error("User does not exists");
 			try {
-				res.sendRedirect("http://"+ConfigParamMap.params.get("HOST_IP")+":"+ConfigParamMap.params.get("HOST_PORT")+"/subscription/login.html");
+				res.sendRedirect("http://"+ConfigParamMap.params.get("HOST_IP")+":"+ConfigParamMap.params.get("HOST_PORT")+"/subscription/login.jsp");
 			} catch (IOException e) {
 				LOG.error(e);
 			}

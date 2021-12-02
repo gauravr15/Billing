@@ -1,6 +1,7 @@
-package com.odin.filters;
+package com.odin.filter;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -16,13 +17,12 @@ import org.apache.log4j.Logger;
 
 import com.odin.configManager.ConfigParamMap;
 
-
 /**
  * Servlet Filter implementation class ServletFilter
  */
-@WebFilter("/home.html")
+@WebFilter("/home.jsp")
 public class ServletFilter implements Filter {
-
+	
 	Logger LOG = Logger.getLogger(ServletFilter.class.getClass());
     /**
      * Default constructor. 
@@ -43,16 +43,15 @@ public class ServletFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
+		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
 		String user = (String) session.getAttribute("user");
-		if(user!=null) {
-			chain.doFilter(request, response);
+		LOG.debug("User logged in as "+user);
+		if(user == null) {
+			LOG.debug("User needs to log in.");
+			res.sendRedirect("/subscription/login.jsp");
 		}
-		else {
-			HttpServletResponse res = (HttpServletResponse)response;
-			res.sendRedirect("http://"+ConfigParamMap.params.get("HOST_IP")+":"+ConfigParamMap.params.get("HOST_PORT")+"/subscription/index.html");
-			LOG.error("user needs to log in first");
-		}
+		chain.doFilter(request, response);
 	}
 
 	/**

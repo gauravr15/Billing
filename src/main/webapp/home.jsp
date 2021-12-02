@@ -3,7 +3,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel ="stylesheet" href = "bootstrap.min.css">
-<link rel ="stylesheet" href = "style.css">
+<% String user=(String)session.getAttribute("user"); %>
+<% String level= (String)session.getAttribute("level");%>
+<script>
+var user = '${user}';
+var level = '${level}';
+sessionStorage.setItem("user",user);
+sessionStorage.setItem("level",level);
+</script>
 </head>
 <body style="background-color:#111827;">
     <div class="container col-md-1 mt-5" style="color: white; display: flex; justify-content: center;">
@@ -24,7 +31,7 @@
                 <button class="w-100" style="border-radius: 20px; border:lime; background-color:lightseagreen; color:black; height: 80px;">Check Points</button>
             </div>
         </div>
-        <div class="row" style="justify-content: center;">
+        <div class="row" id="employee" style="justify-content: center;">
             <div class="col-md-2 py-3">
                 <button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumslateblue; color:black; height: 80px;">Employee Attendance</button>
             </div>
@@ -35,9 +42,12 @@
                 <button class="w-100" style="border-radius: 20px; border:lime; background-color:mediumslateblue; color:black; height: 80px;">Employee Payout</button>
             </div>
         </div>
-        <div class="row" style="justify-content: center;">
+        <div class="row" id = "admin" style="justify-content: center;">
             <div class="col-md-2 py-3">
                 <button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumorchid; color:black; height: 80px;">Send SMS</button>
+            </div>
+            <div class="col-md-2 py-3">
+                <button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumorchid; color:black; height: 80px;">Create User</button>
             </div>
         </div>
     </div>
@@ -55,5 +65,11 @@
         </div>
         </div>
         </footer>
+        <script>
+        if(level.localeCompare('3')!=0){
+        	document.getElementById('employee').remove()
+        	document.getElementById('admin').remove();
+        }
+        </script>>
 </body>
 </html>
