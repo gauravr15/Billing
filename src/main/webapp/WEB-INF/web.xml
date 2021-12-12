@@ -13,4 +13,12 @@
     <servlet-name>login</servlet-name>
     <servlet-class>com.odin.pageController.LoginController</servlet-class>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>checkCustomer</servlet-name>
+    <url-pattern>/checkCustomer</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>checkCustomer</servlet-name>
+    <servlet-class>com.odin.customerHandler.CustomerCheck</servlet-class>
+  </servlet>
 </web-app>
