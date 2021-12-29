@@ -21,4 +21,28 @@
     <servlet-name>checkCustomer</servlet-name>
     <servlet-class>com.odin.customerHandler.CustomerCheck</servlet-class>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>finalizeBill</servlet-name>
+    <url-pattern>/finalizeBill</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>finalizeBill</servlet-name>
+    <servlet-class>com.odin.pageController.FinalizeBill</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>createCustomer</servlet-name>
+    <url-pattern>/createCustomer</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>createCustomer</servlet-name>
+    <servlet-class>com.odin.customerHandler.CreateCustomer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckItem</servlet-name>
+    <url-pattern>/checkItem</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CheckItem</servlet-name>
+    <servlet-class>com.odin.billingHandler.ItemCheck</servlet-class>
+  </servlet>
 </web-app>

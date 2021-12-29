@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import com.odin.configManager.ConfigParamMap;
 
 /**
  * Servlet Filter implementation class ServletFilter

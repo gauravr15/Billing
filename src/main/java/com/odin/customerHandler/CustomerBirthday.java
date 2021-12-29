@@ -11,8 +11,8 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import com.odin.configManager.ConfigParamMap;
-import com.odin.constantValues.ConfigParamName;
-import com.odin.constantValues.SMSConstants;
+import com.odin.constantValues.status.ConfigParamName;
+import com.odin.constantValues.status.SMSConstants;
 import com.odin.dbManager.DBConnectionAgent;
 import com.odin.smsThread.SmsInterface;
 
