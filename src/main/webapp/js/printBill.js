@@ -1,7 +1,8 @@
 /*
 *
 *
-*/
+*
+*@author gaurav */
 
 if (document.getElementById('checkoutUser') != null) {
 	if(document.getElementById('checkoutDiscount').innerText==''){
