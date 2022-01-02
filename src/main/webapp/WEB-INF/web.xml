@@ -43,6 +43,14 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>CheckItem</servlet-name>
-    <servlet-class>com.odin.billingHandler.ItemCheck</servlet-class>
+    <servlet-class>com.odin.pageController.ItemCheck</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SaveBill</servlet-name>
+    <url-pattern>/saveBill</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>SaveBill</servlet-name>
+    <servlet-class>com.odin.billingHandler.CommitBill</servlet-class>
   </servlet>
 </web-app>

@@ -41,4 +41,17 @@ public class status {
 			values = type;
 		}
 	}
+	
+	public enum TLOGConstants{
+		CUSTOMERID("CST"),
+		PRODUCTS("PRD"),
+		TOTAL("TOT"),
+		DISCOUNT("DIS"),
+		PAYMENT("PAY"),
+		CASHIER("CR");
+		public String values;
+		TLOGConstants(String string){
+			values = string;
+		}
+	}
 }

@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="bootstrap.min.css">
-<link rel="stylesheet" href="style.css">
 <%
 String customer_name = (String) session.getAttribute("customer_name");
 String customer_phone = (String) session.getAttribute("customer_phone");
@@ -168,19 +167,15 @@ session.setAttribute("billState", null);
 		function checkList() {
 			let bill_state = document.getElementById('bill_state').innerText
 			let counter = 0;
-			alert("bill_state is " + bill_state);
 			if (bill_state == 'null') {
 				counter = document.getElementById('count').innerText
-				alert("if block count " + counter);
 			} else if (bill_state != 'null') {
 				counter = document.getElementById('check_count').innerText
-				alert("else block count " + counter);
 			}
 			let prefix = 'item'
 			let quantity = 'quantity'
 			let checkoutItem = ''
 			for (let i = 1; i <= parseInt(counter); i++) {
-				alert("inside loop "+i);
 				let inputId = prefix + i;
 				console.log(document.getElementById(inputId).value);
 				let quantityID = quantity + i;
@@ -192,9 +187,9 @@ session.setAttribute("billState", null);
 							+ document.getElementById(quantityID).value + ',';
 				}
 			}
-			alert("checkoutList value is " + checkoutItem)
 			document.getElementById('checkoutList').value = checkoutItem.slice(0, -1)
 			document.getElementById('checkoutBillState').value = bill_state;
+			document.getElementById('checkoutUser').value = document.getElementById('customer_id').innerText;
 		}
 	</script>
 	<form onsubmit="checkList()" action="/subscription/finalizeBill"
@@ -205,6 +200,8 @@ session.setAttribute("billState", null);
 				<input id="checkoutList" name="checkoutList" class="col-md-12"
 					style="margin-left: 10px; display: none;" /> <input
 					id="checkoutBillState" name="checkoutBillState" class="col-md-12"
+					style="margin-left: 10px; display: none;" />
+					<input id="checkoutUser" name="checkoutUser" class="col-md-12"
 					style="margin-left: 10px; display: none;" />
 			</div>
 			<div class="row" style="display: flex; justify-content: center;">

@@ -1,4 +1,4 @@
-package com.odin.billingHandler;
+package com.odin.pageController;
 
 import java.io.IOException;
 
@@ -31,25 +31,21 @@ public class ItemCheck extends HttpServlet{
 	}
 
 	private void process(HttpServletRequest req, HttpServletResponse res) {
+		LOG.debug("Inside Item Check class");
 		String billList = req.getParameter("checkItemList");
 		String customer_name = req.getParameter("checkItemCustomerName");
 		String customer_phone = req.getParameter("checkItemCustomerPhone");
 		String customer_id = req.getParameter("checkItemCustomerId");
-		int count = Integer.parseInt(req.getParameter("checkItemCount"));
 		String[] itemList = billList.split(",");
 		String item = "";
 		String quantity ="";
 		double totalAmount = 0;
 		HttpSession session = req.getSession();
-		for(int i=0;i<count;i++) {
-			if(ServiceMap.services.get(Integer.parseInt(itemList[i].split(" ")[0])) !=null) {
+		for(int i=0;i<itemList.length;i++) {
+			if(itemList[i]!=null && ServiceMap.service_code.get(ServiceMap.services.get(Integer.valueOf(itemList[i].split(" ")[0])))!=null) {
 			item = item+ServiceMap.services.get(Integer.parseInt(itemList[i].split(" ")[0]))+",";
 			quantity = quantity+itemList[i].split(" ")[1]+",";
 			totalAmount = totalAmount + ((int) ServiceMap.service_charges.get(ServiceMap.services.get(Integer.parseInt(itemList[i].split(" ")[0]))))*Integer.parseInt(itemList[i].split(" ")[1]);
-			}
-			else {
-				item = item+"%"+",";
-				quantity = quantity+itemList[i].split(" ")[1]+",";
 			}
 		}
 		item = item.substring(0, item.length()-1);
@@ -59,7 +55,7 @@ public class ItemCheck extends HttpServlet{
 		session.setAttribute("customer_id", customer_id);
 		session.setAttribute("item", item);
 		session.setAttribute("quantity", quantity);
-		session.setAttribute("count", Integer.toString(count));
+		session.setAttribute("count", Integer.toString(itemList.length));
 		session.setAttribute("checkTotal", Double.toString(totalAmount));
 		session.setAttribute("billState", BillState.BILL_CHECK.values);
 		try {
