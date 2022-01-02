@@ -1,3 +1,4 @@
+/* @author gaurav bhasker */
 if (document.getElementById('checkoutUser') != null) {
 	if(document.getElementById('checkoutDiscount').innerText==''){
 		document.getElementById('discountDiv').style.display = "none";
