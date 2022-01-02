@@ -14,11 +14,15 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.odin.configManager.ConfigParamMap;
-import com.odin.constantValues.CustomerConstants;
+import com.odin.constantValues.status.CustomerConstants;
 import com.odin.dbManager.DBConnectionAgent;
 
 public class CustomerCheck extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5271093883918867304L;
 	Logger LOG = Logger.getLogger(CustomerCheck.class.getClass());
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -73,7 +77,7 @@ public class CustomerCheck extends HttpServlet {
 				}
 				else {
 					session.setAttribute("customer_name", CustomerConstants.NOT_AVAILABLE.values);
-					session.setAttribute("customer_phone", CustomerConstants.NOT_AVAILABLE.values);
+					session.setAttribute("customer_phone", mobile);
 					session.setAttribute("customer_id", CustomerConstants.NOT_AVAILABLE.values);
 				}
 				try {
@@ -83,6 +87,13 @@ public class CustomerCheck extends HttpServlet {
 				}
 			} 
 			catch (SQLException e) {
+				LOG.error(e);
+			}
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
 				LOG.error(e);
 			}
 		}

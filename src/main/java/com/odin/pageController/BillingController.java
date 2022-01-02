@@ -13,6 +13,10 @@ import com.odin.configManager.ConfigParamMap;
 
 public class BillingController extends HttpServlet{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4296185212420144350L;
 	Logger LOG = Logger.getLogger(BillingController.class.getClass());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {

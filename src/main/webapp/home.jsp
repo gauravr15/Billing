@@ -22,7 +22,9 @@ sessionStorage.setItem("level",level);
     <div class="container col-md-12 mt-5">
         <div class="row" style="justify-content: center;">
             <div class="col-md-2 py-3">
+            <a href = "/subscription/billing.jsp">
                 <button class="w-100 " style="border-radius: 20px; border:lime; background-color:lightseagreen; color:black; height: 80px;">Billing</button>
+                </a>
             </div>
             <div class="col-md-2 py-3">
                 <button class="w-100" style="border-radius: 20px; border:lime; background-color:lightseagreen; color:black; height: 80px;">Past Billing</button>

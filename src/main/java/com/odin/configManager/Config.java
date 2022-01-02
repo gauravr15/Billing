@@ -12,8 +12,8 @@ import org.apache.log4j.Logger;
 
 import com.odin.Exceptions.ConfigException;
 import com.odin.Exceptions.PropertiesException;
-import com.odin.constantValues.ConfigParamName;
 import com.odin.constantValues.DBConstants;
+import com.odin.constantValues.status.ConfigParamName;
 import com.odin.customerHandler.CustomerBirthday;
 import com.odin.dbManager.DBCheck;
 
@@ -85,12 +85,21 @@ public class Config extends HttpServlet{
 		}
 		else {
 			try {
+				ConfigParamMap.params.put("BIRTHDAY_CHECK", "false");
 				throw new ConfigException ("Value for BIRTHDAY_CHECK is not configured");
 			}
 			catch(Exception e) {
 				LOG.debug("Bithday SMS will not be sent.");
 			}
 		}
+		if(ConfigParamMap.params.get("BILL_PRINT_SIZE")==null) {
+			ConfigParamMap.params.put("BILL_PRINT_SIZE", "14");
+			LOG.fatal("No print size configured for bill print, so setting size as 14px");
+		}
+		else {
+			LOG.debug("Bill print size configured as "+ConfigParamMap.params.get("BILL_PRINT_SIZE"));
+		}
+		LOG.debug("Initialising services "+ServiceMap.getInstance());
 		LOG.debug("System initialisation complete.");
 	}
 }
