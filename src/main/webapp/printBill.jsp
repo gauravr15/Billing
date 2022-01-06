@@ -41,65 +41,73 @@ document.getElementById('transTime').innerText = '<%=transTime%>';
 </script>
 </head>
 <body id="pageBody">
-    <div class="container-fluid col-md-12" style="display: flex; justify-content: center;">
-        <div class="row" style="text-align: center;">
-            <img src="assets/loginAssets/banner.png" style="max-width:80px; max-height: 80px;">
-        </div>
-    </div>
-    <div class="container-fluid col-md-12"
-    id="addHeader" style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; display:flex; justify-content: center;">
-        <div style="text-align: center;">
-            <div class="col-md-12"
-                style="display: flex; flex-direction: column; text-align: center; font-weight: 1000; text-decoration: underline;">
-                The Radiance
-                Beauty Parlour</div>
-            <div class="col-md-12" style="display: flex; flex-direction: column; text-align: center;">Kharmanchak,
-                D.N.Singh Road</div>
-            <div class="col-md-12" style="display: flex; flex-direction: column; text-align: center;">Bhagalpur, Pin
-                no. - 812001</div>
-            <div class="col-md-12" style="display: flex; flex-direction: column;">Mob No.- 9546573640</div>
-        </div>
-    </div>
-    <div class="container-fluid col-md-12" style="display: flex; justify-content: center;">
-        <div class="row" style="text-align: center;">
-            <p id="dateTime" style="font-weight: 500"></p>
-        </div>
-    </div>
-    <hr id="firstLine" class="mt-0" style="border-top: solid 4px #000 !important;">
-    <div class="container-fluid col-md-4" id="header"
-        style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-        <div class="row">
-            <p class="col">Item</p>
-            <p class="col">Qty</p>
-            <p class="col">Rate</p>
-            <p class="col">Amount</p>
-        </div>
-    </div>
-    <hr id="secondLine" class="mt-0" style="border-top: solid 4px #000 !important;">
-    <div class="container-fluid col-md-4" id="billList"
-        style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-        
-    </div>
-    <hr class="mt-0" style="border-top: solid 4px #000 !important;">
-    <div class="container-fluid col-md-4"
-        style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-        <div class="row" id="discountDiv" style="text-align: right; font-weight: 1000;">
-            <p class="col">Discount</p>
-            <p class="col" id="discount"></p>
-        </div>
-        <div class="row" style="text-align: right; font-weight: 1000;">
-            <p class="col">Payable Amount</p>
-            <p class="col" id="billTotal"></p>
-        </div>
-    </div>
-    <hr class="mt-0" style="border-top: solid 1px #000 !important;">
-    <div class="container-fluid col-md-4"
-        style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-        <div class="row" style="text-align: center;">
-            <p>Thank you. Please visit again.</p>
-        </div>
-    </div>
-    <script>
+	<div class="container-fluid col-md-12"
+		style="display: flex; justify-content: center;">
+		<div class="row" style="text-align: center;">
+			<img src="assets/loginAssets/banner.png"
+				style="max-width: 80px; max-height: 80px;">
+		</div>
+	</div>
+	<div class="container-fluid col-md-12" id="addHeader"
+		style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; display: flex; justify-content: center;">
+		<div style="text-align: center;">
+			<div class="col-md-12"
+				style="display: flex; flex-direction: column; text-align: center; font-weight: 1000; text-decoration: underline;">
+				The Radiance Beauty Parlour</div>
+			<div class="col-md-12"
+				style="display: flex; flex-direction: column; text-align: center;">Kharmanchak,
+				D.N.Singh Road</div>
+			<div class="col-md-12"
+				style="display: flex; flex-direction: column; text-align: center;">Bhagalpur,
+				Pin no. - 812001</div>
+			<div class="col-md-12" style="display: flex; flex-direction: column;">Mob
+				No.- 9546573640</div>
+		</div>
+	</div>
+	<div class="container-fluid col-md-12"
+		style="display: flex; justify-content: center;">
+		<div class="row" style="text-align: center;">
+			<p id="dateTime" style="font-weight: 500"></p>
+		</div>
+	</div>
+	<hr id="firstLine" class="mt-0"
+		style="border-top: solid 4px #000 !important;">
+	<div class="container-fluid col-md-4" id="header"
+		style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+		<div class="row">
+			<p class="col">Item</p>
+			<p class="col">Qty</p>
+			<p class="col">Rate</p>
+			<p class="col">Amount</p>
+		</div>
+	</div>
+	<hr id="secondLine" class="mt-0"
+		style="border-top: solid 4px #000 !important;">
+	<div class="container-fluid col-md-4" id="billList"
+		style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+
+	</div>
+	<hr class="mt-0" style="border-top: solid 4px #000 !important;">
+	<div class="container-fluid col-md-4"
+		style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+		<div class="row" id="discountDiv"
+			style="text-align: right; font-weight: 1000;">
+			<p class="col">Discount</p>
+			<p class="col" id="discount"></p>
+		</div>
+		<div class="row" style="text-align: right; font-weight: 1000;">
+			<p class="col">Payable Amount</p>
+			<p class="col" id="billTotal"></p>
+		</div>
+	</div>
+	<hr class="mt-0" style="border-top: solid 1px #000 !important;">
+	<div class="container-fluid col-md-4"
+		style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+		<div class="row" style="text-align: center;">
+			<p>Thank you. Please visit again.</p>
+		</div>
+	</div>
+	<script>
     function saveBill(){
     	document.getElementById('printCheckoutUser').value = document.getElementById('checkoutUser').innerText
     	document.getElementById('printItemList').value = document.getElementById('itemList').innerText
@@ -109,39 +117,54 @@ document.getElementById('transTime').innerText = '<%=transTime%>';
     	document.getElementById('printTotal').value = document.getElementById('total').innerText
     	document.getElementById('printCheckoutDiscount').value = document.getElementById('checkoutDiscount').innerText
     	document.getElementById('printPayAmount').value = document.getElementById('payAmount').innerText
+    	var select = document.getElementById('paymentMode');
+    	var value = select.options[select.selectedIndex].value;
+    	document.getElementById('payMode').value = value;
     }
     </script>
-    <form onsubmit="saveBill()" method="get" action="/subscription/saveBill">
-    <div class="container-fluid col-md-4"
-        style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-        <input id="printCheckoutUser" name="printCheckoutUser" style="display: none;"/>
-		<input id="printItemList" name="printItemList" style="display: none;"/>
-		<input id="printQtyList" name="printQtyList" style="display: none;"/>
-		<input id="printRateList" name="printRateList" style="display: none;"/>
-		<input id="printPriceList" name="printPriceList" style="display: none;"/>
-		<input id="printTotal" name="printTotal" style="display: none;"/>
-		<input id="printCheckoutDiscount" name="printCheckoutDiscount" style="display: none;"/>
-		<input id="printPayAmount" name="printPayAmount" style="display: none;"/>
-        <div class="row" style="text-align: center;">
-        	<button id="generateBill" type="submit">Generate Bill</button>
-        </div>
-    </div>
-    </form>
-    <div class="container-fluid col-md-4"
-        style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-        <div class="row" style="text-align: center;">
-            <button id="finalPrint" onclick="window.print()">PrintBill</button>
-        </div>
-    </div>
-    <div class="container col-md-12 mt-5">
-        <div class="row" style="justify-content: center;">
-            <div class="col-md-2 py-3">
-            <a href = "/subscription/home.jsp">
-                <button class="w-100 " id ="HomeBtn">Back to Home page</button>
-                </a>
-            </div>
-         </div>
-    </div>
-    <script src="js/printBill.js"></script>
+	<form onsubmit="saveBill()" method="get"
+		action="/subscription/saveBill">
+		<div class="container-fluid col-md-4"
+			style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+			<input id="printCheckoutUser" name="printCheckoutUser"
+				style="display: none;" /> <input id="printItemList"
+				name="printItemList" style="display: none;" /> <input
+				id="printQtyList" name="printQtyList" style="display: none;" /> <input
+				id="printRateList" name="printRateList" style="display: none;" /> <input
+				id="printPriceList" name="printPriceList" style="display: none;" />
+			<input id="printTotal" name="printTotal" style="display: none;" /> <input
+				id="printCheckoutDiscount" name="printCheckoutDiscount"
+				style="display: none;" /> <input id="printPayAmount"
+				name="printPayAmount" style="display: none;" />
+				<input id="payMode"
+				name="payMode" style="display: none;" />
+				<div id = "payment" class="row" style="text-align: center;">
+				<label for="pay">Choose payment method : </label>
+		<select id="paymentMode" name="PaymentMode" id="cars">
+			<option value="cash">Cash</option>
+			<option value="online">Online</option>
+		</select>
+		</div>
+			<div class="row mt-2" style="text-align: center;">
+				<button id="generateBill" type="submit">Generate Bill</button>
+			</div>
+		</div>
+	</form>
+	<div class="container-fluid col-md-4"
+		style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+		<div class="row" style="text-align: center;">
+			<button id="finalPrint" onclick="window.print()">PrintBill</button>
+		</div>
+	</div>
+	<div class="container col-md-12 mt-5">
+		<div class="row" style="justify-content: center;">
+			<div class="col-md-2 py-3">
+				<a href="/subscription/home.jsp">
+					<button class="w-100 " id="HomeBtn">Back to Home page</button>
+				</a>
+			</div>
+		</div>
+	</div>
+	<script src="js/printBill.js"></script>
 </body>
 </html>

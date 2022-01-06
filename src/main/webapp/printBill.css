@@ -4,6 +4,10 @@
            #finalPrint, #HomeBtn {
         	display :  none;
    			 }
+   			 
+   			select, label{
+   			display: none;
+   			}
 
             p {
                 font-size: 11px;
