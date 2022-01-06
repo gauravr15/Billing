@@ -158,6 +158,14 @@ public class CommitBill extends HttpServlet{
 	public void setThreadId(String threadId) {
 		this.threadId = threadId;
 	}
+	
+	public String getPaymentMode() {
+		return paymentMode;
+	}
+
+	public void setPaymentMode(String paymentMode) {
+		this.paymentMode = paymentMode;
+	}
 
 	
 	String checkoutUser;
@@ -174,7 +182,9 @@ public class CommitBill extends HttpServlet{
 	String transId;
 	String transTime;
 	String threadId;
+	String paymentMode;
 	
+
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
 		process(req, res);
@@ -196,6 +206,7 @@ public class CommitBill extends HttpServlet{
 		setCheckoutDiscount(req.getParameter("printCheckoutDiscount"));
 		setPayAmount(req.getParameter("printPayAmount"));
 		setCashierId((String)session.getAttribute("user"));
+		setPaymentMode(req.getParameter("payMode"));
 		String discount;
 		if(getCheckoutDiscount() == null || getCheckoutDiscount() == "0") {
 			discount = "0";
@@ -216,7 +227,7 @@ public class CommitBill extends HttpServlet{
 		setTransTime(dtf.format(ldt));
 		DBConnectionAgent dbObject = new DBConnectionAgent();
 		Connection conn = dbObject.connectionAgent();
-		String query = "INSERT INTO CUSTOMER_BILL VALUES (?,?,?,?,?,?,?,?,?)";
+		String query = "INSERT INTO CUSTOMER_BILL (customer_id,transaction_id,transaction_date,purchase_info,bill_total,discount,pay_amount,payment_mode,bill_state,cashier_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
 		LOG.debug("query to fire : "+query);
 		try {
 			PreparedStatement stmt = conn.prepareStatement(query);
@@ -227,8 +238,9 @@ public class CommitBill extends HttpServlet{
 			stmt.setString(5, getTotal());
 			stmt.setString(6, getCheckoutDiscount());
 			stmt.setString(7, getPayAmount());
-			stmt.setString(8, getBillState());
-			stmt.setString(9, getCashierId());
+			stmt.setString(8, getPaymentMode());
+			stmt.setString(9, getBillState());
+			stmt.setString(10, getCashierId());
 			stmt.executeUpdate();
 		} catch (SQLException e1) {
 			LOG.error(e1);

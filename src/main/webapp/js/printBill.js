@@ -18,6 +18,7 @@ if (document.getElementById('checkoutUser') != null) {
 if(document.getElementById('billState').innerText != 'null'){
 	document.getElementById('finalPrint').style.display = "visible";
 	document.getElementById('HomeBtn').style.display = "visible"
+	document.getElementById('payment').style.display = "none";
 	document.getElementById('generateBill').style.display = "none";
 	document.getElementById('dateTime').innerText = "Date-"+document.getElementById('transTime').innerText
 	document.getElementById('dateTime').style.display = "visible"
@@ -26,6 +27,7 @@ else if(document.getElementById('billState').innerText == 'null'){
 	document.getElementById('finalPrint').style.display = "none";
 	document.getElementById('HomeBtn').style.display = "none"
 	document.getElementById('generateBill').style.display = "visible";
+	document.getElementById('payment').style.display = "visible";
 	document.getElementById('dateTime').style.display = "none"
 }
 
