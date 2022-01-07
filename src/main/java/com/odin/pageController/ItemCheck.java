@@ -1,6 +1,10 @@
 package com.odin.pageController;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +16,7 @@ import org.apache.log4j.Logger;
 import com.odin.configManager.ConfigParamMap;
 import com.odin.configManager.ServiceMap;
 import com.odin.constantValues.status.BillState;
+import com.odin.dbManager.DBConnectionAgent;
 
 public class ItemCheck extends HttpServlet{
 
@@ -48,6 +53,23 @@ public class ItemCheck extends HttpServlet{
 			totalAmount = totalAmount + ((int) ServiceMap.service_charges.get(ServiceMap.services.get(Integer.parseInt(itemList[i].split(" ")[0]))))*Integer.parseInt(itemList[i].split(" ")[1]);
 			}
 		}
+		DBConnectionAgent dbObject = new DBConnectionAgent();
+		String query = "SELECT POINTS FROM CUSTOMER_DETAILS WHERE PHONE = ?";
+		Connection conn = dbObject.connectionAgent();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String _points = null;
+		try {
+			stmt = conn.prepareStatement(query);
+			stmt.setString(1, customer_phone);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				_points = rs.getString("POINTS");
+			}
+			LOG.debug("Available points is : "+_points);
+		} catch (SQLException e1) {
+			LOG.debug(e1);
+		}
 		item = item.substring(0, item.length()-1);
 		quantity = quantity.substring(0, quantity.length()-1);
 		session.setAttribute("customer_name", customer_name);
@@ -58,6 +80,14 @@ public class ItemCheck extends HttpServlet{
 		session.setAttribute("count", Integer.toString(itemList.length));
 		session.setAttribute("checkTotal", Double.toString(totalAmount));
 		session.setAttribute("billState", BillState.BILL_CHECK.values);
+		session.setAttribute("points", _points);
+		try {
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e1) {
+			LOG.error(e1);
+		}
 		try {
 			redirectSelf(res);
 		} catch (IOException e) {

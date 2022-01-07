@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.odin.cashback.AddCashback;
 import com.odin.configManager.ConfigParamMap;
 import com.odin.constantValues.status.BillState;
 import com.odin.dbManager.DBConnectionAgent;
@@ -166,6 +167,15 @@ public class CommitBill extends HttpServlet{
 	public void setPaymentMode(String paymentMode) {
 		this.paymentMode = paymentMode;
 	}
+	
+	public String getCashback() {
+		return cashback;
+	}
+
+	public void setCashback(String cashback) {
+		this.cashback = cashback;
+	}
+
 
 	
 	String checkoutUser;
@@ -182,6 +192,7 @@ public class CommitBill extends HttpServlet{
 	String transId;
 	String transTime;
 	String threadId;
+	String cashback;
 	String paymentMode;
 	
 
@@ -195,7 +206,7 @@ public class CommitBill extends HttpServlet{
 	}
 	
 	private void process(HttpServletRequest req, HttpServletResponse res) {
-		LOG.debug("going to commit bill");
+		LOG.debug("going to commit");
 		HttpSession session = req.getSession();
 		setCheckoutUser(req.getParameter("printCheckoutUser"));
 		setItemList(req.getParameter("printItemList"));
@@ -208,11 +219,15 @@ public class CommitBill extends HttpServlet{
 		setCashierId((String)session.getAttribute("user"));
 		setPaymentMode(req.getParameter("payMode"));
 		String discount;
-		if(getCheckoutDiscount() == null || getCheckoutDiscount() == "0") {
+		PreparedStatement stmt = null;
+		if(getCheckoutDiscount().isEmpty()) {
 			discount = "0";
+			AddCashback cashbackObj = new AddCashback();
+			setCashback(Integer.toString(cashbackObj.cashBackCalculator((int)Double.parseDouble(getPayAmount()))));
 		}
 		else
 			discount = req.getParameter("printCheckoutDiscount");
+		
 		setCheckoutDiscount(discount);
 		int count = getItemList().split(",").length;
 		String purchases = "";
@@ -227,23 +242,32 @@ public class CommitBill extends HttpServlet{
 		setTransTime(dtf.format(ldt));
 		DBConnectionAgent dbObject = new DBConnectionAgent();
 		Connection conn = dbObject.connectionAgent();
-		String query = "INSERT INTO CUSTOMER_BILL (customer_id,transaction_id,transaction_date,purchase_info,bill_total,discount,pay_amount,payment_mode,bill_state,cashier_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
+		String query = "INSERT INTO CUSTOMER_BILL (customer_id,transaction_id,transaction_date,purchase_info,bill_total,discount,cashback_received,pay_amount,payment_mode,bill_state,cashier_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 		LOG.debug("query to fire : "+query);
 		try {
-			PreparedStatement stmt = conn.prepareStatement(query);
+			stmt = conn.prepareStatement(query);
 			stmt.setString(1, getCheckoutUser());
 			stmt.setString(2, getTransId());
 			stmt.setString(3, getTransTime());
 			stmt.setString(4, getPurchases());
 			stmt.setString(5, getTotal());
 			stmt.setString(6, getCheckoutDiscount());
-			stmt.setString(7, getPayAmount());
-			stmt.setString(8, getPaymentMode());
-			stmt.setString(9, getBillState());
-			stmt.setString(10, getCashierId());
+			stmt.setString(7, getCashback());
+			stmt.setString(8, getPayAmount());
+			stmt.setString(9, getPaymentMode());
+			stmt.setString(10, getBillState());
+			stmt.setString(11, getCashierId());
 			stmt.executeUpdate();
 		} catch (SQLException e1) {
 			LOG.error(e1);
+		}
+		finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				LOG.error(e);
+			}
 		}
 		setThreadId(Thread.currentThread().getName());
 		Tlog tLogObj = new Tlog();

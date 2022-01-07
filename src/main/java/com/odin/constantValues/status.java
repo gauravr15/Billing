@@ -54,4 +54,15 @@ public class status {
 			values = string;
 		}
 	}
+	
+	public enum CashBackConstants{
+		NOTUSED("NU"),
+		PARTIALLYUSED("PU"),
+		USED("U"),
+		EXPIRED("EXP");
+		public String values;
+		CashBackConstants(String string){
+			values = string;
+		}
+	}
 }
