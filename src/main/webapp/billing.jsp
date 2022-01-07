@@ -13,6 +13,7 @@ String quantity = (String) session.getAttribute("quantity");
 String count = (String) session.getAttribute("count");
 String billState = (String) session.getAttribute("billState");
 String checkTotal = (String) session.getAttribute("checkTotal");
+String points = (String) session.getAttribute("points");
 %>
 <p id="customer_name" style="display: none;"></p>
 <p id="customer_phone" style="display: none;"></p>
@@ -22,6 +23,7 @@ String checkTotal = (String) session.getAttribute("checkTotal");
 <p id="bill_state" style="display: none;"></p>
 <p id="item" style="display: none;"></p>
 <p id="totalAmount" style="display: none;"></p>
+<p id="points" style="display: none;"></p>
 <script>
 	document.getElementById('totalAmount').innerText = '<%=checkTotal%>';
 	document.getElementById('check_count').innerText = '<%=count%>';
@@ -31,6 +33,7 @@ String checkTotal = (String) session.getAttribute("checkTotal");
 	document.getElementById('customer_name').innerText = '<%=customer_name%>';
 	document.getElementById('customer_phone').innerText = '<%=customer_phone%>';
 	document.getElementById('customer_id').innerText = '<%=customer_id%>';
+	document.getElementById('points').innerText = '<%=points%>';
 	let customer_phone = document.getElementById('customer_phone').innerText;
 	let customer_name = document.getElementById('customer_name').innerText;
 	if (customer_phone.localeCompare('INV') == 0) {
@@ -48,6 +51,8 @@ session.setAttribute("item", null);
 session.setAttribute("quantity", null);
 session.setAttribute("count", null);
 session.setAttribute("billState", null);
+session.setAttribute("checkTotal", null);
+session.setAttribute("points", null);
 %>
 </head>
 
@@ -157,6 +162,8 @@ session.setAttribute("billState", null);
 						class="col-md-12" style="margin-left: 10px; display: none;" />
 					<h1 id="checkTotal" class="col-md-12"
 						style="color: red; display: flex; justify-content: center;"></h1>
+					<h1 id="availablePoints" class="col-md-12"
+						style="color: red; display: flex; justify-content: center;"></h1>
 					<button id="checkoutItem" class="col-md-1" type="submit"
 						style="margin-left: 10px;">Check</button>
 				</div>
@@ -190,6 +197,9 @@ session.setAttribute("billState", null);
 			document.getElementById('checkoutList').value = checkoutItem.slice(0, -1)
 			document.getElementById('checkoutBillState').value = bill_state;
 			document.getElementById('checkoutUser').value = document.getElementById('customer_id').innerText;
+			var select = document.getElementById('discountDrop');
+	    	var value = select.options[select.selectedIndex].value;
+	    	document.getElementById('discountSelect').value = value;
 		}
 	</script>
 	<form onsubmit="checkList()" action="/subscription/finalizeBill"
@@ -200,15 +210,30 @@ session.setAttribute("billState", null);
 				<input id="checkoutList" name="checkoutList" class="col-md-12"
 					style="margin-left: 10px; display: none;" /> <input
 					id="checkoutBillState" name="checkoutBillState" class="col-md-12"
+					style="margin-left: 10px; display: none;" /> <input
+					id="checkoutUser" name="checkoutUser" class="col-md-12"
 					style="margin-left: 10px; display: none;" />
-					<input id="checkoutUser" name="checkoutUser" class="col-md-12"
+					<input
+					id="discountSelect" name="discountSelect" class="col-md-12"
 					style="margin-left: 10px; display: none;" />
 			</div>
 			<div class="row" style="display: flex; justify-content: center;">
-				<input id="checkoutDiscount" name="checkoutDiscount"
-					class="col-md-1" placeholder="Discount" style="margin-left: 10px;" />
+				<div id = "discountMode" class="col-md-2" style="text-align: center;">
+				<label for="dis">Discount/Redeem Points : </label>
+		<select id="discountDrop" name="disMode" id="cars">
+			<option value="noDiscount">None</option>
+			<option value="discount">Discount</option>
+			<option value="RedeemPoints">Redeem Points</option>
+		</select>
+		</div>
+			</div>
+			<div class="row" style="display: flex; justify-content: center;">
+				<input id="checkoutDiscount" name="checkoutDiscount" class="col-md-1 mt-1"
+					placeholder="RedeemPoints/Discount" style="margin-left: 10px;" />
+			</div>
+			<div class="row" style="display: flex; justify-content: center;">
 				<button id="checkout" type="submit" name="checkout" value="checkout"
-					class="col-md-1" style="margin-left: 10px;">Checkout</button>
+					class="col-md-1 mt-1" style="margin-left: 10px;">Checkout</button>
 			</div>
 		</div>
 	</form>

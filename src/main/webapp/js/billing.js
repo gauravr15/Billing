@@ -4,9 +4,11 @@ function reEnter() {
 	let mobileCheck = document.getElementById('mobileCheck');
 	let newRegister = document.getElementById('newRegister');
 	let billList = document.getElementById('billList');
+	let checkout = document.getElementById('checkoutDiv');
 	reEnterPhone.style.display = "none";
 	newRegister.style.display = "none";
 	billList.style.display = "none";
+	checkout.style.display = "none";
 	customerCheck.style.display = "block";
 	let number = sessionStorage.getItem('customer_phone');
 	mobileCheck.value = number;
@@ -80,6 +82,7 @@ function addProductBox() {
 let bill_status = document.getElementById('bill_state').innerText;
 if (document.getElementById('bill_state').innerText == 'BC') {
 	document.getElementById('checkTotal').innerText = document.getElementById('totalAmount').innerText
+	document.getElementById('availablePoints').innerText = "Available points : "+document.getElementById('points').innerText
 	checkedItems(document.getElementById('check_count').innerText);
 }
 let reEnterPhone = document.getElementById('reEnterPhone');
@@ -124,31 +127,3 @@ else {
 	customerCheck.style.display = "none";
 }
 
-function showBill() {
-	let parent = document.getElementById('billTable')
-	let prefix = "item"
-	let itemPre = "itemPre"
-	let qtyPre = "qtyPre"
-	let pricePre = "pricePre"
-	for (i = 0; i < count; i++) {
-		let child = document.createElement('tr');
-		child.setAttribute('id', prefix + i);
-		parent.appendChild(child)
-		parent = document.getElementById(prefix + i);
-		child = document.createElement('td')
-		parent.appendChild(child);
-		child.setAttribute('id', itemPre + i);
-		child.innerText = 'gaurav'
-		parent = document.getElementById(prefix + i);
-		child = document.createElement('td')
-		parent.appendChild(child);
-		child.setAttribute('id', qtyPre + i);
-		child.innerText = '2'
-		parent = document.getElementById(prefix + i);
-		child = document.createElement('td')
-		parent.appendChild(child);
-		child.setAttribute('id', pricePre + i);
-		child.innerText = '2500'
-	}
-
-}
