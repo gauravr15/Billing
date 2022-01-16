@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 
 import com.odin.Exceptions.ConfigException;
 import com.odin.Exceptions.PropertiesException;
+import com.odin.cashback.AddNewPoints;
+import com.odin.cashback.RemoveExpiredPoints;
 import com.odin.constantValues.DBConstants;
 import com.odin.constantValues.status.ConfigParamName;
 import com.odin.customerHandler.CustomerBirthday;
@@ -86,11 +88,35 @@ public class Config extends HttpServlet{
 		else {
 			try {
 				ConfigParamMap.params.put("BIRTHDAY_CHECK", "false");
-				throw new ConfigException ("Value for BIRTHDAY_CHECK is not configured");
+				throw new ConfigException ("Value for BIRTHDAY_CHECK is not configured so birthday SMS will not be sent");
 			}
 			catch(Exception e) {
-				LOG.debug("Bithday SMS will not be sent.");
+				LOG.debug(e);
 			}
+		}
+		LOG.debug("Initialising queue manager");
+		QueueManager.initQueue();
+		if(Boolean.parseBoolean(ConfigParamMap.params.get("EXPIRE_POINTS"))== true) {
+			LOG.debug("Point expiry is set as true");
+			LOG.debug("Points will expire after "+ConfigParamMap.params.get("POINTS_VALIDITY")+" days");
+			RemoveExpiredPoints pointsObj = new RemoveExpiredPoints();
+			Thread pointsThread = new Thread(pointsObj);
+			pointsThread.setName("VALIDATE_POINTS");
+			pointsThread.start();
+		}
+		else if(Boolean.parseBoolean(ConfigParamMap.params.get("EXPIRE_POINTS"))== false){
+			LOG.debug("Points expiry is set as false");
+		}
+		if(Boolean.parseBoolean(ConfigParamMap.params.get("COOLDOWN_POINTS"))== true) {
+			LOG.debug("Cooldown point is set as true");
+			LOG.debug("New points will be added after "+ConfigParamMap.params.get("COOLDOWN_PERIOD")+" days");
+			AddNewPoints addPointsObj = new AddNewPoints();
+			Thread pointsThread = new Thread(addPointsObj);
+			pointsThread.setName("COOLDOWN_POINTS");
+			pointsThread.start();
+		}
+		else if(Boolean.parseBoolean(ConfigParamMap.params.get("COOLDOWN_POINTS"))== false){
+			LOG.debug("Cooldown points is set as false");
 		}
 		if(ConfigParamMap.params.get("BILL_PRINT_SIZE")==null) {
 			ConfigParamMap.params.put("BILL_PRINT_SIZE", "14");

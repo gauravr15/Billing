@@ -16,6 +16,7 @@ String checkoutDiscount = (String) session.getAttribute("checkoutDiscount");
 String payAmount = (String) session.getAttribute("payAmount");
 String billState = (String) session.getAttribute("billState");
 String transTime = (String) session.getAttribute("transTime");
+String discountMode = (String) session.getAttribute("discountMode");
 %>
 <p id="checkoutUser" style="display: none;"></p>
 <p id="itemList" style="display: none;"></p>
@@ -27,6 +28,7 @@ String transTime = (String) session.getAttribute("transTime");
 <p id="payAmount" style="display: none;"></p>
 <p id="billState" style="display: none;"></p>
 <p id="transTime" style="display: none;"></p>
+<p id="discountMode" style="display: none;"></p>
 <script>
 document.getElementById('checkoutUser').innerText = '<%=checkoutUser%>';
 document.getElementById('itemList').innerText = '<%=itemList%>';
@@ -38,7 +40,25 @@ document.getElementById('checkoutDiscount').innerText = '<%=checkoutDiscount%>';
 document.getElementById('payAmount').innerText = '<%=payAmount%>';
 document.getElementById('billState').innerText = '<%=billState%>';
 document.getElementById('transTime').innerText = '<%=transTime%>';
+if(document.getElementById('billState').innerText.localeCompare('BI') == 0){
+	alert("Please click on CHECK before proceeding or keep the points within limit.");
+	history.go(-1);
+}
+document.getElementById('discountMode').innerText = '<%=discountMode%>';
 </script>
+<%
+session.setAttribute("checkoutUser",null);
+session.setAttribute("itemList",null);
+session.setAttribute("qtyList",null);
+session.setAttribute("rateList",null);
+session.setAttribute("priceList",null);
+session.setAttribute("total",null);
+session.setAttribute("checkoutDiscount",null);
+session.setAttribute("payAmount",null);
+session.setAttribute("billState",null);
+session.setAttribute("transTime",null);
+session.setAttribute("discountMode",null);
+%>
 </head>
 <body id="pageBody">
 	<div class="container-fluid col-md-12"
@@ -117,6 +137,7 @@ document.getElementById('transTime').innerText = '<%=transTime%>';
     	document.getElementById('printTotal').value = document.getElementById('total').innerText
     	document.getElementById('printCheckoutDiscount').value = document.getElementById('checkoutDiscount').innerText
     	document.getElementById('printPayAmount').value = document.getElementById('payAmount').innerText
+    	document.getElementById('disMode').value = document.getElementById('discountMode').innerText
     	var select = document.getElementById('paymentMode');
     	var value = select.options[select.selectedIndex].value;
     	document.getElementById('payMode').value = value;
@@ -138,6 +159,8 @@ document.getElementById('transTime').innerText = '<%=transTime%>';
 				name="printPayAmount" style="display: none;" />
 				<input id="payMode"
 				name="payMode" style="display: none;" />
+				<input id="disMode"
+				name="disMode" style="display: none;" />
 				<div id = "payment" class="row" style="text-align: center;">
 				<label for="pay">Choose payment method : </label>
 		<select id="paymentMode" name="PaymentMode" id="cars">
