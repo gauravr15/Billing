@@ -197,9 +197,7 @@ session.setAttribute("points", null);
 			document.getElementById('checkoutList').value = checkoutItem.slice(0, -1)
 			document.getElementById('checkoutBillState').value = bill_state;
 			document.getElementById('checkoutUser').value = document.getElementById('customer_id').innerText;
-			var select = document.getElementById('discountDrop');
-	    	var value = select.options[select.selectedIndex].value;
-	    	document.getElementById('discountSelect').value = value;
+			document.getElementById('cashbackPoints').value = document.getElementById('points').innerText ;
 		}
 	</script>
 	<form onsubmit="checkList()" action="/subscription/finalizeBill"
@@ -214,7 +212,7 @@ session.setAttribute("points", null);
 					id="checkoutUser" name="checkoutUser" class="col-md-12"
 					style="margin-left: 10px; display: none;" />
 					<input
-					id="discountSelect" name="discountSelect" class="col-md-12"
+					id="cashbackPoints" name="cashBackPoints" class="col-md-12"
 					style="margin-left: 10px; display: none;" />
 			</div>
 			<div class="row" style="display: flex; justify-content: center;">
@@ -223,7 +221,7 @@ session.setAttribute("points", null);
 		<select id="discountDrop" name="disMode" id="cars">
 			<option value="noDiscount">None</option>
 			<option value="discount">Discount</option>
-			<option value="RedeemPoints">Redeem Points</option>
+			<option id="redeem" value="RedeemPoints" style="display: none;">Redeem Points</option>
 		</select>
 		</div>
 			</div>

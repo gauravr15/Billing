@@ -84,6 +84,7 @@ if (document.getElementById('bill_state').innerText == 'BC') {
 	document.getElementById('checkTotal').innerText = document.getElementById('totalAmount').innerText
 	document.getElementById('availablePoints').innerText = "Available points : "+document.getElementById('points').innerText
 	checkedItems(document.getElementById('check_count').innerText);
+	document.getElementById('redeem').style.display = 'block';
 }
 let reEnterPhone = document.getElementById('reEnterPhone');
 let customerCheck = document.getElementById('customerCheck');

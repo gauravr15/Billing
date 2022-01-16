@@ -2,6 +2,9 @@ package com.odin.constantValues;
 
 public class status {
 	
+	public static final String removePoints = "REMP";
+	public static final String addCooldownPoints = "ADDCP";
+	
 	public enum ConfigParamName {
 		BIRTHDAY_CHECK("BC"),
 		SMS_SEND_TIME("SST");
@@ -24,7 +27,8 @@ public class status {
 	
 	public enum BillState{
 		BILL_CHECK("BC"),
-		BILL_PRINT("BP");
+		BILL_PRINT("BP"),
+		BILL_INVALID("BI");
 		public String values;
 		BillState(String string){
 			values = string;
@@ -62,6 +66,17 @@ public class status {
 		EXPIRED("EXP");
 		public String values;
 		CashBackConstants(String string){
+			values = string;
+		}
+	}
+	
+	public enum CashbackValidity{
+		NOT_APPLICABLE("NA"),
+		NOT_COOLDOWN("NCD"),
+		VALID("V"),
+		EXPIRED("EXP");
+		public String values;
+		CashbackValidity(String string){
 			values = string;
 		}
 	}

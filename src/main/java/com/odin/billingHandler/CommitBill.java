@@ -15,36 +15,30 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import com.odin.cashback.AddCashback;
+import com.odin.cashback.CalculateCashback;
+import com.odin.cashback.RedeemPoints;
 import com.odin.configManager.ConfigParamMap;
+import com.odin.constantValues.status;
 import com.odin.constantValues.status.BillState;
 import com.odin.dbManager.DBConnectionAgent;
 import com.odin.fileProcessor.Tlog;
 
-public class CommitBill extends HttpServlet{
-	
+public class CommitBill extends HttpServlet {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8800204910303315485L;
-	
+
 	Logger LOG = Logger.getLogger(CommitBill.class.getClass());
-	
-	String checkoutCustomer;
+
+
 	public Logger getLOG() {
 		return LOG;
 	}
 
 	public void setLOG(Logger lOG) {
 		LOG = lOG;
-	}
-
-	public String getCheckoutCustomer() {
-		return checkoutCustomer;
-	}
-
-	public void setCheckoutCustomer(String checkoutCustomer) {
-		this.checkoutCustomer = checkoutCustomer;
 	}
 
 	public String getItemList() {
@@ -110,8 +104,7 @@ public class CommitBill extends HttpServlet{
 	public void setBillState(String billState) {
 		this.billState = billState;
 	}
-	
-	
+
 	public String getCheckoutUser() {
 		return checkoutUser;
 	}
@@ -119,7 +112,7 @@ public class CommitBill extends HttpServlet{
 	public void setCheckoutUser(String checkoutUser) {
 		this.checkoutUser = checkoutUser;
 	}
-	
+
 	public String getCashierId() {
 		return cashierId;
 	}
@@ -127,7 +120,7 @@ public class CommitBill extends HttpServlet{
 	public void setCashierId(String cashierId) {
 		this.cashierId = cashierId;
 	}
-	
+
 	public String getPurchases() {
 		return purchases;
 	}
@@ -135,7 +128,7 @@ public class CommitBill extends HttpServlet{
 	public void setPurchases(String purchases) {
 		this.purchases = purchases;
 	}
-	
+
 	public String getTransId() {
 		return transId;
 	}
@@ -151,7 +144,7 @@ public class CommitBill extends HttpServlet{
 	public void setTransTime(String transTime) {
 		this.transTime = transTime;
 	}
-	
+
 	public String getThreadId() {
 		return threadId;
 	}
@@ -159,7 +152,7 @@ public class CommitBill extends HttpServlet{
 	public void setThreadId(String threadId) {
 		this.threadId = threadId;
 	}
-	
+
 	public String getPaymentMode() {
 		return paymentMode;
 	}
@@ -167,7 +160,7 @@ public class CommitBill extends HttpServlet{
 	public void setPaymentMode(String paymentMode) {
 		this.paymentMode = paymentMode;
 	}
-	
+
 	public String getCashback() {
 		return cashback;
 	}
@@ -175,9 +168,31 @@ public class CommitBill extends HttpServlet{
 	public void setCashback(String cashback) {
 		this.cashback = cashback;
 	}
-
-
 	
+	public String getCashBackValidityStatus() {
+		return cashBackValidityStatus;
+	}
+
+	public void setCashBackValidityStatus(String cashBackValidityStatus) {
+		this.cashBackValidityStatus = cashBackValidityStatus;
+	}
+	
+	public String getDiscountMode() {
+		return discountMode;
+	}
+
+	public void setDiscountMode(String discountMode) {
+		this.discountMode = discountMode;
+	}
+	
+	public String getAvailableCashBack() {
+		return availableCashBack;
+	}
+
+	public void setAvailableCashBack(String availableCashBack) {
+		this.availableCashBack = availableCashBack;
+	}
+
 	String checkoutUser;
 	String itemList;
 	String qtyList;
@@ -194,7 +209,9 @@ public class CommitBill extends HttpServlet{
 	String threadId;
 	String cashback;
 	String paymentMode;
-	
+	String cashBackValidityStatus;
+	String discountMode;
+	String availableCashBack;
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -204,7 +221,7 @@ public class CommitBill extends HttpServlet{
 	public void doPost(HttpServletRequest req, HttpServletResponse res) {
 		process(req, res);
 	}
-	
+
 	private void process(HttpServletRequest req, HttpServletResponse res) {
 		LOG.debug("going to commit");
 		HttpSession session = req.getSession();
@@ -216,25 +233,52 @@ public class CommitBill extends HttpServlet{
 		setTotal(req.getParameter("printTotal"));
 		setCheckoutDiscount(req.getParameter("printCheckoutDiscount"));
 		setPayAmount(req.getParameter("printPayAmount"));
-		setCashierId((String)session.getAttribute("user"));
+		setCashierId((String) session.getAttribute("user"));
 		setPaymentMode(req.getParameter("payMode"));
-		String discount;
+		setDiscountMode(req.getParameter("disMode"));
+		String discount = "0";
 		PreparedStatement stmt = null;
-		if(getCheckoutDiscount().isEmpty()) {
-			discount = "0";
-			AddCashback cashbackObj = new AddCashback();
-			setCashback(Integer.toString(cashbackObj.cashBackCalculator((int)Double.parseDouble(getPayAmount()))));
+		boolean cashbackOnDiscount = Boolean.parseBoolean(ConfigParamMap.params.get("CASHBACK_ON_DISCOUNT"));
+		LOG.debug("Cashback on discount is set as : "+cashbackOnDiscount);
+		if (cashbackOnDiscount == true) {
+			LOG.debug("Proceeding with cashbackOnDiscount");
+			CalculateCashback cashbackObj = new CalculateCashback();
+			setCashback(Integer.toString(cashbackObj.cashBackCalculator((int) Double.parseDouble(getPayAmount()))));
+			if (getCheckoutDiscount().isEmpty()) {
+				discount = "0";
+			} else
+				discount = req.getParameter("printCheckoutDiscount");
+			setAvailableCashBack(Integer.toString(cashbackObj.cashBackCalculator((int) Double.parseDouble(getPayAmount()))));
+		} else if (cashbackOnDiscount == false) {
+			LOG.debug("Proceeding without cashbackOnDiscount");
+			if (getCheckoutDiscount().isEmpty()) {
+				discount = "0";
+				CalculateCashback cashbackObj = new CalculateCashback();
+				setCashback(Integer.toString(cashbackObj.cashBackCalculator((int) Double.parseDouble(getPayAmount()))));
+				setAvailableCashBack(Integer.toString(cashbackObj.cashBackCalculator((int) Double.parseDouble(getPayAmount()))));
+			} else {
+				discount = req.getParameter("printCheckoutDiscount");
+				setAvailableCashBack("0");
+			}
 		}
-		else
-			discount = req.getParameter("printCheckoutDiscount");
-		
 		setCheckoutDiscount(discount);
+		if(getDiscountMode().equals("RedeemPoints") && !getCheckoutDiscount().equals("0")) {
+			RedeemPoints pointsDiscountObj = new RedeemPoints();
+			boolean pointRedeemed = pointsDiscountObj.cashbackDiscount(this);
+			if(pointRedeemed)
+				LOG.debug("CashBack points redeemed successfully");
+			else {
+				LOG.error("Failed to redeem points setting discount to 0");
+				discount = "0";
+			}
+		}
 		int count = getItemList().split(",").length;
 		String purchases = "";
-		for(int i=0;i<count;i++) {
-			purchases = purchases+ getItemList().split(",")[i]+"-"+getQtyList().split(",")[i]+"-"+getRateList().split(",")[i]+",";
+		for (int i = 0; i < count; i++) {
+			purchases = purchases + getItemList().split(",")[i] + "-" + getQtyList().split(",")[i] + "-"
+					+ getRateList().split(",")[i] + ",";
 		}
-		purchases = purchases.substring(0, purchases.length()-1);
+		purchases = purchases.substring(0, purchases.length() - 1);
 		setPurchases(purchases);
 		setTransId(UUID.randomUUID().toString());
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
@@ -242,9 +286,16 @@ public class CommitBill extends HttpServlet{
 		setTransTime(dtf.format(ldt));
 		DBConnectionAgent dbObject = new DBConnectionAgent();
 		Connection conn = dbObject.connectionAgent();
-		String query = "INSERT INTO CUSTOMER_BILL (customer_id,transaction_id,transaction_date,purchase_info,bill_total,discount,cashback_received,pay_amount,payment_mode,bill_state,cashier_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-		LOG.debug("query to fire : "+query);
+		String query = "INSERT INTO CUSTOMER_BILL (customer_id,transaction_id,transaction_date,purchase_info,bill_total,discount,cashback_received, cashback_available, cashback_validity,pay_amount,payment_mode,bill_state,cashier_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		LOG.debug("query to fire : " + query);
 		try {
+			if(Boolean.parseBoolean(ConfigParamMap.params.get("CASHBACK")) == false) 
+				setCashBackValidityStatus(status.CashbackValidity.NOT_APPLICABLE.values);
+			else if(Integer.parseInt(ConfigParamMap.params.get("COOLDOWN_PERIOD"))== 0)
+				setCashBackValidityStatus(status.CashbackValidity.VALID.values);
+			else
+				setCashBackValidityStatus(Boolean.parseBoolean(ConfigParamMap.params.get("COOLDOWN_POINTS"))== true?status.CashbackValidity.NOT_COOLDOWN.values:status.CashbackValidity.VALID.values);
+			LOG.debug("Cashback feature is set as "+Boolean.parseBoolean(ConfigParamMap.params.get("CASHBACK")));
 			stmt = conn.prepareStatement(query);
 			stmt.setString(1, getCheckoutUser());
 			stmt.setString(2, getTransId());
@@ -253,15 +304,16 @@ public class CommitBill extends HttpServlet{
 			stmt.setString(5, getTotal());
 			stmt.setString(6, getCheckoutDiscount());
 			stmt.setString(7, getCashback());
-			stmt.setString(8, getPayAmount());
-			stmt.setString(9, getPaymentMode());
-			stmt.setString(10, getBillState());
-			stmt.setString(11, getCashierId());
+			stmt.setString(8, getAvailableCashBack());
+			stmt.setString(9, getCashBackValidityStatus());
+			stmt.setString(10, getPayAmount());
+			stmt.setString(11, getPaymentMode());
+			stmt.setString(12, getBillState());
+			stmt.setString(13, getCashierId());
 			stmt.executeUpdate();
 		} catch (SQLException e1) {
 			LOG.error(e1);
-		}
-		finally {
+		} finally {
 			try {
 				stmt.close();
 				conn.close();
@@ -272,7 +324,7 @@ public class CommitBill extends HttpServlet{
 		setThreadId(Thread.currentThread().getName());
 		Tlog tLogObj = new Tlog();
 		boolean _tlogResp = tLogObj.write(this);
-		LOG.debug("Tlog written is : "+_tlogResp);
+		LOG.debug("Tlog written is : " + _tlogResp);
 		session.setAttribute("checkoutUser", req.getParameter("printCheckoutUser"));
 		session.setAttribute("itemList", req.getParameter("printItemList"));
 		session.setAttribute("qtyList", req.getParameter("printQtyList"));
@@ -284,8 +336,8 @@ public class CommitBill extends HttpServlet{
 		session.setAttribute("transTime", getTransTime());
 		session.setAttribute("billState", BillState.BILL_PRINT.values);
 		try {
-			res.sendRedirect("http://" + ConfigParamMap.params.get("HOST_IP") + ":" + ConfigParamMap.params.get("HOST_PORT")
-			+ "/subscription/printBill.jsp");
+			res.sendRedirect("http://" + ConfigParamMap.params.get("HOST_IP") + ":"
+					+ ConfigParamMap.params.get("HOST_PORT") + "/subscription/printBill.jsp");
 		} catch (IOException e) {
 			LOG.error(e);
 		}
