@@ -70,7 +70,7 @@ public class AddNewPoints extends UpdatePoints implements Runnable{
 		}
 		else {
 			try {
-				throw new ConfigException("PARAM_NAME POINTS IS NOT CONFIGURED IN CONFIG_PARAMS TABLE, using 200 as default");
+				throw new ConfigException("PARAM_NAME POINTS IS NOT CONFIGURED IN QUEUE_CONTROL TABLE, using 200 as default");
 			}
 			catch(Exception e) {
 				queue_size = 200;

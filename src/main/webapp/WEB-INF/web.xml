@@ -85,4 +85,12 @@
     <servlet-name>CreateUser</servlet-name>
     <servlet-class>com.odin.pageController.CreateUser</servlet-class>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>Earning</servlet-name>
+    <url-pattern>/earning</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Earning</servlet-name>
+    <servlet-class>com.odin.pageController.CreateUser</servlet-class>
+  </servlet>
 </web-app>

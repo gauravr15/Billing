@@ -106,4 +106,22 @@ public class status {
 			values = str;
 		}
 	}
+	
+	public enum Earning{
+		DONE("D"),
+		NOT_DONE("ND"),;
+		public String values;
+		Earning(String str){
+			values = str;
+		}
+	}
+	
+	public enum PaymentMode{
+		ONLINE("ONLINE"),
+		OFFLINE("CASH");
+		public String value;
+		PaymentMode(String str){
+			value = str;
+		}
+	}
 }

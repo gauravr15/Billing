@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.odin.Exceptions.ConfigException;
 import com.odin.Exceptions.PropertiesException;
+import com.odin.businessHandler.EarningCalculator;
 import com.odin.cashback.AddNewPoints;
 import com.odin.cashback.RemoveExpiredPoints;
 import com.odin.constantValues.DBConstants;
@@ -118,6 +119,10 @@ public class Config extends HttpServlet{
 		else if(Boolean.parseBoolean(ConfigParamMap.params.get("COOLDOWN_POINTS"))== false){
 			LOG.debug("Cooldown points is set as false");
 		}
+		EarningCalculator earningObj = new EarningCalculator();
+		Thread earningThread = new Thread(earningObj);
+		earningThread.setName("EARNING_CALCULATOR");
+		earningThread.start();
 		if(ConfigParamMap.params.get("BILL_PRINT_SIZE")==null) {
 			ConfigParamMap.params.put("BILL_PRINT_SIZE", "14");
 			LOG.fatal("No print size configured for bill print, so setting size as 14px");
