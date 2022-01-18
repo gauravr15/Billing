@@ -3,6 +3,7 @@ package com.odin.billingHandler;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +23,7 @@ import com.odin.constantValues.status;
 import com.odin.constantValues.status.BillState;
 import com.odin.dbManager.DBConnectionAgent;
 import com.odin.fileProcessor.Tlog;
+import com.odin.smsThread.BillingSMS;
 
 public class CommitBill extends HttpServlet {
 
@@ -192,8 +194,51 @@ public class CommitBill extends HttpServlet {
 	public void setAvailableCashBack(String availableCashBack) {
 		this.availableCashBack = availableCashBack;
 	}
+	
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+	
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
+	
+	public String getBillingMessage() {
+		return billingMessage;
+	}
+
+	public void setBillingMessage(String billingMessage) {
+		this.billingMessage = billingMessage;
+	}
+
+	public String getSmsTask() {
+		return smsTask;
+	}
+
+	public void setSmsTask(String smsTask) {
+		this.smsTask = smsTask;
+	}
+	
+	public String getSmsType() {
+		return smsType;
+	}
+
+	public void setSmsType(String smsType) {
+		this.smsType = smsType;
+	}
 
 	String checkoutUser;
+	String customerName;
+	String customerPhone;
+	String billingMessage;
 	String itemList;
 	String qtyList;
 	String rateList;
@@ -212,6 +257,9 @@ public class CommitBill extends HttpServlet {
 	String cashBackValidityStatus;
 	String discountMode;
 	String availableCashBack;
+	String smsTask;
+	String smsType;
+
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) {
@@ -237,7 +285,6 @@ public class CommitBill extends HttpServlet {
 		setPaymentMode(req.getParameter("payMode"));
 		setDiscountMode(req.getParameter("disMode"));
 		String discount = "0";
-		PreparedStatement stmt = null;
 		boolean cashbackOnDiscount = Boolean.parseBoolean(ConfigParamMap.params.get("CASHBACK_ON_DISCOUNT"));
 		LOG.debug("Cashback on discount is set as : "+cashbackOnDiscount);
 		if (cashbackOnDiscount == true) {
@@ -281,11 +328,13 @@ public class CommitBill extends HttpServlet {
 		purchases = purchases.substring(0, purchases.length() - 1);
 		setPurchases(purchases);
 		setTransId(UUID.randomUUID().toString());
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss");
 		LocalDateTime ldt = LocalDateTime.now();
 		setTransTime(dtf.format(ldt));
 		DBConnectionAgent dbObject = new DBConnectionAgent();
 		Connection conn = dbObject.connectionAgent();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		String query = "INSERT INTO CUSTOMER_BILL (customer_id,transaction_id,transaction_date,purchase_info,bill_total,discount,cashback_received, cashback_available, cashback_validity,pay_amount,payment_mode,bill_state,cashier_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		LOG.debug("query to fire : " + query);
 		try {
@@ -311,17 +360,66 @@ public class CommitBill extends HttpServlet {
 			stmt.setString(12, getBillState());
 			stmt.setString(13, getCashierId());
 			stmt.executeUpdate();
-		} catch (SQLException e1) {
-			LOG.error(e1);
-		} finally {
+			if(getCashBackValidityStatus().equals(status.CashbackValidity.VALID.values)) {
+				LOG.debug("Updating points in customer details table");
+				query = "SELECT POINTS FROM CUSTOMER_DETAILS WHERE ID = ?";
+				stmt = conn.prepareStatement(query);
+				stmt.setString(1, getCheckoutUser());
+				rs = stmt.executeQuery();
+				int _updatedPoints = 0;
+				while(rs.next()) {
+					_updatedPoints = Integer.parseInt(rs.getString("POINTS")) + Integer.parseInt(getAvailableCashBack());
+				}
+				query = "UPDATE CUSTOMER_DETAILS SET POINTS = ? WHERE ID = ?";
+				stmt = conn.prepareStatement(query);
+				stmt.setString(1,Integer.toString(_updatedPoints));
+				stmt.setString(2, getCheckoutUser());
+				if(stmt.executeUpdate() != 0 ) {
+					LOG.debug("User points updated successfully");
+				}
+				else
+					LOG.error("Failed to update user points");
+			}
+			query = "SELECT NAME,PHONE FROM CUSTOMER_DETAILS WHERE ID = ?";
+			stmt = conn.prepareStatement(query);
+			stmt.setString(1, getCheckoutUser());
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				setCustomerName(rs.getString("NAME"));
+				setCustomerPhone(rs.getString("PHONE"));
+			}
+			query = "SELECT MESSAGE FROM NOTIFICATION WHERE SMS_TYPE = 'BILLING'";
+			stmt = conn.prepareStatement(query);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				setBillingMessage(rs.getString("MESSAGE"));
+			}
 			try {
+				rs.close();
 				stmt.close();
 				conn.close();
-			} catch (SQLException e) {
-				LOG.error(e);
+			} catch (SQLException e1) {
+				LOG.error(e1);
 			}
+		} catch (SQLException e1) {
+			LOG.error(e1);
 		}
 		setThreadId(Thread.currentThread().getName());
+		if(Boolean.parseBoolean(ConfigParamMap.params.get("BILLING_SMS")) == true) {
+			setSmsType("BILLING");
+			LOG.debug("Sending billing sms");
+			BillingSMS smsObj = new BillingSMS();
+			boolean _response = smsObj.sendSMS(this);
+			setSmsTask(_response == true? status.smsSuccess:status.smsFailure);
+			if(_response == true)
+				LOG.debug("SMS sent successfully");
+			else
+				LOG.error("Failed to send sms");
+		}
+		else {
+			setSmsTask(status.smsDisabled);
+			LOG.debug("Billing sms is disabled.");
+		}
 		Tlog tLogObj = new Tlog();
 		boolean _tlogResp = tLogObj.write(this);
 		LOG.debug("Tlog written is : " + _tlogResp);

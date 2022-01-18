@@ -10,13 +10,14 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import com.odin.billingHandler.CommitBill;
 import com.odin.configManager.ConfigParamMap;
 import com.odin.constantValues.status.ConfigParamName;
 import com.odin.constantValues.status.SMSConstants;
 import com.odin.dbManager.DBConnectionAgent;
 import com.odin.smsThread.SmsInterface;
 
-public class CustomerBirthday extends SmsInterface implements Runnable {
+public class CustomerBirthday implements Runnable,SmsInterface {
 
 	Logger LOG = Logger.getLogger(CustomerBirthday.class.getClass());
 	
@@ -114,5 +115,17 @@ public class CustomerBirthday extends SmsInterface implements Runnable {
 
 	public void sendSMS() {
 
+	}
+
+	@Override
+	public boolean sendSMS(CommitBill customerObj) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean insertSMSLog() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
