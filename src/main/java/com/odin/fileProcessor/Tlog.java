@@ -18,7 +18,7 @@ public class Tlog {
 	public boolean write(CommitBill transactionRecord) {
 		LOG.debug("Writing tlog");
 		boolean flag = false;
-		String header = "Time|Thread|Customer_ID|Purchase_Info|Total|Discount|Payment_Amount|Cashier_ID";
+		String header = "Time|Thread|Customer_ID|Purchase_Info|Total|Discount|Payment_Amount|Sms_Task|Cashier_ID";
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
 		LocalDateTime ldt = LocalDateTime.now();
 		String _currentTime = dtf.format(ldt);
@@ -43,6 +43,7 @@ public class Tlog {
 					+ TLOGConstants.TOTAL.values + "=" + transactionRecord.getTotal() + "|"
 					+ TLOGConstants.DISCOUNT.values + "=" + transactionRecord.getCheckoutDiscount() + "|"
 					+ TLOGConstants.PAYMENT.values + "=" + transactionRecord.getPayAmount() + "|"
+					+ TLOGConstants.SMS_SENT.values+"="+transactionRecord.getSmsTask()+"|"
 					+ TLOGConstants.CASHIER.values+"="+transactionRecord.getCashierId() + "\n";
 			fw.write(transactionLogStr);
 			fw.close();

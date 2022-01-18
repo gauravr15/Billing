@@ -89,7 +89,7 @@ public class LoginController extends HttpServlet {
 		try {
 			while (rs.next()) {
 				userExists = true;
-				this.empId = Integer.parseInt(rs.getString("id"));
+				setEmpId(Integer.parseInt(rs.getString("id")));
 				this.level = rs.getString("level");
 			}
 		} catch (SQLException e) {
@@ -99,7 +99,7 @@ public class LoginController extends HttpServlet {
 		LOG.debug("User exists is : " + userExists);
 		if (userExists) {
 			LOG.debug("setting user session");
-			session.setAttribute("user", user);
+			session.setAttribute("user", Integer.toString(getEmpId()));
 			session.setAttribute("level", this.level);
 			LOG.debug("logged in as : " + (String) session.getAttribute("user"));
 			this.user = (String) session.getAttribute("user");

@@ -50,7 +50,7 @@
 								<p style="color: gray; margin-top: 10px;">Password</p>
 							</div>
 							<div class="row">
-								<input name="pass"
+								<input name="pass" type="password"
 									style="color: white; height: 50px; width: 450px; margin-right: auto; margin-left: auto; margin-top: -10px; border-radius: 5px; border: 1px solid gray; background-color: #18212f;"></input>
 							</div>
 							<button class="btn btn-primary mt-5 w-50"

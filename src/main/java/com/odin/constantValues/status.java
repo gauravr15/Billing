@@ -4,6 +4,9 @@ public class status {
 	
 	public static final String removePoints = "REMP";
 	public static final String addCooldownPoints = "ADDCP";
+	public static final String smsSuccess = "1";
+	public static final String smsFailure = "0";
+	public static final String smsDisabled = "-1";
 	
 	public enum ConfigParamName {
 		BIRTHDAY_CHECK("BC"),
@@ -52,6 +55,7 @@ public class status {
 		TOTAL("TOT"),
 		DISCOUNT("DIS"),
 		PAYMENT("PAY"),
+		SMS_SENT("SMS"),
 		CASHIER("CR");
 		public String values;
 		TLOGConstants(String string){

@@ -13,7 +13,7 @@ public class CustomerDetailsPointModifier {
 	
 	Logger LOG = Logger.getLogger(CustomerDetailsPointModifier.class.getClass());
 	
-	boolean updatePoints(UpdatePoints upObj) {
+	public boolean updatePoints(UpdatePoints upObj) {
 		boolean result = false;
 		LOG.debug("customer id is "+upObj.getCustomerID());
 		LOG.debug("Points to delete is : "+upObj.getExpiredPoints());
