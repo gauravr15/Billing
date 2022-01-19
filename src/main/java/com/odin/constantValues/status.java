@@ -84,4 +84,15 @@ public class status {
 			values = string;
 		}
 	}
+	
+	public enum ProductEntry{
+		MANUAL("MANUAL"),
+		AUTOMATIC("AUTO"),
+		SUCCESS("SUCCESS"),
+		FAIL("FAIL");
+		public String values;
+		ProductEntry(String str){
+			values = str;
+		}
+	}
 }

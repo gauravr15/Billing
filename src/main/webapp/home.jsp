@@ -45,11 +45,25 @@ sessionStorage.setItem("level",level);
             </div>
         </div>
         <div class="row" id = "admin" style="justify-content: center;">
+        	<div class="col-md-2 py-3">
+        	<a href = "/subscription/addNewItem">
+                <button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumorchid; color:black; height: 80px;">Add New Product</button>
+                </a>
+            </div>
             <div class="col-md-2 py-3">
                 <button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumorchid; color:black; height: 80px;">Send SMS</button>
             </div>
             <div class="col-md-2 py-3">
                 <button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumorchid; color:black; height: 80px;">Create User</button>
+            </div>
+        </div>
+    </div>
+    <div class="container col-md-12 mt-5">
+        <div class="row" style="justify-content: center;">
+            <div class="col-md-2 py-3">
+            <a href = "/subscription/logout">
+                <button class="w-100 " style="border-radius: 20px; border:red; background-color:red; color:black; height: 80px;">Logout</button>
+                </a>
             </div>
         </div>
     </div>

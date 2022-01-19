@@ -235,6 +235,15 @@ session.setAttribute("points", null);
 			</div>
 		</div>
 	</form>
+	<form method="post" action="/subscription/logout">
+	<div class="container-fluid col-md-12 mt-5">
+				<div class="row"
+					style="display: flex; justify-content: center; color: white;">
+					<button id="logout" class="col-md-1" type="submit"
+						style="margin-left: 10px; background: red;">Logout</button>
+				</div>
+			</div>
+	</form>
 	<footer>
 		<div class="mt-5">
 			<div class="row">

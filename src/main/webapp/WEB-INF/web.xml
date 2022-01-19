@@ -53,4 +53,28 @@
     <servlet-name>SaveBill</servlet-name>
     <servlet-class>com.odin.billingHandler.CommitBill</servlet-class>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>Logout</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Logout</servlet-name>
+    <servlet-class>com.odin.pageController.Logout</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddNewProduct</servlet-name>
+    <url-pattern>/addNewProduct</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddNewProduct</servlet-name>
+    <servlet-class>com.odin.inventory.AddNewProduct</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddNewItem</servlet-name>
+    <url-pattern>/addNewItem</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddNewItem</servlet-name>
+    <servlet-class>com.odin.inventory.FetchAvailableServiceId</servlet-class>
+  </servlet>
 </web-app>
