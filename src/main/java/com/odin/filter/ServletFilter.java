@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 /**
  * Servlet Filter implementation class ServletFilter
  */
-@WebFilter({"/home.jsp","/billing.jsp","/printBill.jsp","/addNewItem.jsp"})
+@WebFilter({"/home.jsp","/billing.jsp","/printBill.jsp","/addNewItem.jsp","createUser.jsp"})
 public class ServletFilter implements Filter {
 	
 	Logger LOG = Logger.getLogger(ServletFilter.class.getClass());
