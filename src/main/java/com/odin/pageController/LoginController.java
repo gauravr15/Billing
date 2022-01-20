@@ -68,7 +68,7 @@ public class LoginController extends HttpServlet {
 		String pass = req.getParameter("pass");
 		DBConnectionAgent DBObject = new DBConnectionAgent();
 		Connection conn = DBObject.connectionAgent();
-		String query = "SELECT employee.level , auth_user.user_id , auth_user.pass, auth_user.id FROM auth_user INNER JOIN employee ON employee.id=auth_user.id where auth_user.user_id = ? and pass = ?;";
+		String query = "SELECT employee.level , auth_user.user_id , auth_user.pass, auth_user.id FROM auth_user INNER JOIN employee ON employee.id=auth_user.id where auth_user.user_id = ? and pass = PASSWORD(?);";
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {

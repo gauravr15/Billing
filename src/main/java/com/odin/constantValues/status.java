@@ -95,4 +95,15 @@ public class status {
 			values = str;
 		}
 	}
+	
+	public enum CreateUser{
+		INSERTED("INS"),
+		INVALID("INV"),
+		INTERNAL_ERROR("IE"),
+		INCORRECT_PASS("ICP");
+		public String values;
+		CreateUser(String str){
+			values = str;
+		}
+	}
 }
