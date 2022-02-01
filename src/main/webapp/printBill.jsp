@@ -129,6 +129,7 @@ session.setAttribute("discountMode",null);
 	</div>
 	<script>
     function saveBill(){
+    	document.getElementById('generateBill').style.display = "none"
     	document.getElementById('printCheckoutUser').value = document.getElementById('checkoutUser').innerText
     	document.getElementById('printItemList').value = document.getElementById('itemList').innerText
     	document.getElementById('printQtyList').value = document.getElementById('qtyList').innerText
