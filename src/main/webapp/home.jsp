@@ -61,6 +61,16 @@ sessionStorage.setItem("level",level);
                 	<button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumorchid; color:black; height: 80px;">Create User</button>
                 </a>
             </div>
+            <div class="col-md-2 py-3">
+            	<a href = "/subscription/logExpense.jsp">
+                	<button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumorchid; color:black; height: 80px;">Log Expenses</button>
+                </a>
+            </div>
+            <div class="col-md-2 py-3">
+            	<a href = "/subscription/earning">
+                	<button class="w-100 " style="border-radius: 20px; border:lime; background-color:mediumorchid; color:black; height: 80px;">View Earnings</button>
+                </a>
+            </div>
         </div>
     </div>
     <div class="container col-md-12 mt-5">
