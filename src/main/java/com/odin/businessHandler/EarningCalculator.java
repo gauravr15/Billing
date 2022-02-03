@@ -22,7 +22,7 @@ public class EarningCalculator implements Runnable {
 	Logger LOG = Logger.getLogger(EarningCalculator.class.getClass());
 
 	public void run() {
-		LOG.debug("Inside earning calculator");
+		LOG.trace("Inside earning calculator");
 		DBConnectionAgent dbObj = new DBConnectionAgent();
 		Connection conn = dbObj.connectionAgent();
 		PreparedStatement stmt = null;
@@ -30,7 +30,7 @@ public class EarningCalculator implements Runnable {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime ldt = LocalDateTime.now();
 		String currentDate = dtf.format(ldt);
-		LOG.debug("Going to check earning for " + currentDate);
+		LOG.trace("Going to check earning for " + currentDate);
 		int queue_size = 0;
 		if (QueueManager.queue.containsKey("EARNING")) {
 			queue_size = QueueManager.queue.get("EARNING");
@@ -60,7 +60,7 @@ public class EarningCalculator implements Runnable {
 				rs.close();
 				stmt.close();
 				conn.close();
-				LOG.debug("Going to sleep for " + earningCheckDuration + " milliseconds");
+				LOG.trace("Going to sleep for " + earningCheckDuration + " milliseconds");
 				try {
 					Thread.sleep(earningCheckDuration);
 					run();

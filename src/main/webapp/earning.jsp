@@ -7,8 +7,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="bootstrap.min.css">
+<%
+String dateList = (String) session.getAttribute("dateList");
+String onlineEarning = (String) session.getAttribute("onlineEarning");
+String offlineEarning = (String) session.getAttribute("offlineEarning");
+String totalEarning = (String) session.getAttribute("totalEarning");
+String expense = (String) session.getAttribute("expense");
+String profit = (String) session.getAttribute("profit");
+%>
+<style>
+table, td, th {
+  border: 1px solid black;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+</style>
 </head>
-<body>
+<body style="background-color: #111827;">
 	<div class="container col-md-1 mt-5"
 		style="color: white; display: flex; justify-content: center;">
 		<img src="assets/loginAssets/rCrown.jpg" style="border-radius: 60px;"
@@ -20,7 +44,18 @@
 	</div>
 	<div class="container-fluid col-md-5 mt-4"
 		style="display: flex; justify-content: center; background-color: white;">
-		<div class="row" id="displayEarning">gaurav</div>
+		<div class="row" id="displayEarning">
+			<table id="summary">
+				<tr>
+					<th>Date</th>
+					<th>Online Earning</th>
+					<th>Offline Earning</th>
+					<th>Total Earning</th>
+					<th>Expense</th>
+					<th>Profit</th>
+				</tr>
+			</table>
+		</div>
 	</div>
 	<footer>
 		<div class="mt-5">
@@ -38,5 +73,20 @@
 			</div>
 		</div>
 	</footer>
+	<p id="dateList" style="display: none;"></p>
+	<p id="onlineEarning" style="display: none;"></p>
+	<p id="offlineEarning" style="display: none;"></p>
+	<p id="totalEarning" style="display: none;"></p>
+	<p id="expense" style="display: none;"></p>
+	<p id="profit" style="display: none;"></p>
+	<script>
+	document.getElementById('dateList').innerText = '<%= dateList%>';
+	document.getElementById('onlineEarning').innerText = '<%= onlineEarning%>';
+	document.getElementById('offlineEarning').innerText = '<%= offlineEarning%>';
+	document.getElementById('totalEarning').innerText = '<%= totalEarning%>';
+	document.getElementById('expense').innerText = '<%= expense%>';
+	document.getElementById('profit').innerText = '<%= profit%>';
+	</script>
+	<script src="js/earning.js"></script>
 </body>
 </html>

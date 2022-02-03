@@ -91,6 +91,6 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>Earning</servlet-name>
-    <servlet-class>com.odin.pageController.CreateUser</servlet-class>
+    <servlet-class>com.odin.businessHandler.ViewEarning</servlet-class>
   </servlet>
 </web-app>
